@@ -23,7 +23,7 @@ jobs:
             cd /root/infra/Ardent
             docker-compose down
             git pull origin staging
-            ./deploy.sh dev
+            ./deploy.sh prod
 
   deploy-prod:
     if: github.ref == 'refs/heads/master'
