@@ -1,0 +1,5 @@
+.env.dev
+.env.prod
+.idea
+deploy.sh
+docker-compose.dev.yml

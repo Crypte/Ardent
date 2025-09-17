@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME:-ardent}-backend
+    environment:
+      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY:-default-key}
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      args:
+        - VITE_PB_URL=${VITE_PB_URL}
+    container_name: ${PROJECT_NAME:-ardent}-app
+    networks:
+      - app-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  landing:
+    build:
+      context: ./landing
+      dockerfile: Dockerfile
+      args:
+        - VITE_APP_URL=${VITE_APP_URL}
+    container_name: ${PROJECT_NAME:-ardent}-landing
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pb_data:

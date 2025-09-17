@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    expose:
+      - "8080"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # En prod, on utilise un volume Docker persistant
+      - pb_data_prod:/pb/pb_data
+    networks:
+      - app-network
+      - caddy-net
+
+  app:
+    expose:
+      - "80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+      - caddy-net
+
+  landing:
+    expose:
+      - "80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+      - caddy-net
+
+volumes:
+  pb_data_prod:
+
+networks:
+  caddy-net:
+    external: true
