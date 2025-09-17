@@ -2,16 +2,38 @@ name: Auto Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [master, staging]
 
 jobs:
-  deploy:
+  deploy-preprod:
+    if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
+    environment: preprod
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy to server
+      - name: Deploy to preprod server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /root/infra/Ardent
+            docker-compose down
+            git pull origin staging
+            ./deploy.sh dev
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to production server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
