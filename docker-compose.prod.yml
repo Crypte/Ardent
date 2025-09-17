@@ -4,7 +4,6 @@ services:
       - "8080"
     environment:
       - NODE_ENV=production
-      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY}
     volumes:
       # En prod, on utilise un volume Docker persistant
       - pb_data_prod:/pb/pb_data

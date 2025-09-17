@@ -4,8 +4,6 @@ services:
       context: ./back
       dockerfile: Dockerfile
     container_name: ${PROJECT_NAME:-ardent}-backend
-    environment:
-      - PB_ENCRYPTION_KEY=${PB_ENCRYPTION_KEY:-default-key}
     networks:
       - app-network
     restart: unless-stopped
