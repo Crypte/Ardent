@@ -16,6 +16,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_PB_URL=${VITE_PB_URL}
+        - VITE_LANDING_URL=${VITE_LANDING_URL}
     container_name: ${PROJECT_NAME:-ardent}-app
     networks:
       - app-network

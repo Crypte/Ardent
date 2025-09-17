@@ -17,7 +17,10 @@ services:
       - "80"
     environment:
       - NODE_ENV=production
-      - VITE_PB_URL=${VITE_PB_URL}
+    build:
+      args:
+        - VITE_PB_URL=${VITE_PB_URL}
+        - VITE_LANDING_URL=${VITE_LANDING_URL}
     networks:
       - app-network
       - caddy-net
@@ -27,7 +30,9 @@ services:
       - "80"
     environment:
       - NODE_ENV=production
-      - VITE_APP_URL=${VITE_APP_URL}
+    build:
+      args:
+        - VITE_APP_URL=${VITE_APP_URL}
     networks:
       - app-network
       - caddy-net
