@@ -1,11 +1,17 @@
 services:
   back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
     container_name: ${PROJECT_NAME:-ardent}-backend
     networks:
       - app-network
     restart: unless-stopped
 
   app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     container_name: ${PROJECT_NAME:-ardent}-app
     networks:
       - app-network
@@ -14,6 +20,9 @@ services:
     restart: unless-stopped
 
   landing:
+    build:
+      context: ./landing
+      dockerfile: Dockerfile
     container_name: ${PROJECT_NAME:-ardent}-landing
     networks:
       - app-network
