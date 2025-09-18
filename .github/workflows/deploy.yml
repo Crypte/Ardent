@@ -28,20 +28,22 @@ jobs:
 
       - name: Build and push images
         run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
           # Build backend
-          docker build -t ghcr.io/${{ github.repository }}/back:staging ./back
-          docker push ghcr.io/${{ github.repository }}/back:staging
+          docker build -t ghcr.io/${REPO_LOWER}/back:staging ./back
+          docker push ghcr.io/${REPO_LOWER}/back:staging
 
           # Build app
-          docker build -t ghcr.io/${{ github.repository }}/app:staging ./app \
+          docker build -t ghcr.io/${REPO_LOWER}/app:staging ./app \
             --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} \
             --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }}
-          docker push ghcr.io/${{ github.repository }}/app:staging
+          docker push ghcr.io/${REPO_LOWER}/app:staging
 
           # Build landing
-          docker build -t ghcr.io/${{ github.repository }}/landing:staging ./landing \
+          docker build -t ghcr.io/${REPO_LOWER}/landing:staging ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }}
-          docker push ghcr.io/${{ github.repository }}/landing:staging
+          docker push ghcr.io/${REPO_LOWER}/landing:staging
 
       - name: Deploy to preprod server
         uses: appleboy/ssh-action@v1.0.3
@@ -79,20 +81,22 @@ jobs:
 
       - name: Build and push images
         run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
           # Build backend
-          docker build -t ghcr.io/${{ github.repository }}/back:latest ./back
-          docker push ghcr.io/${{ github.repository }}/back:latest
+          docker build -t ghcr.io/${REPO_LOWER}/back:latest ./back
+          docker push ghcr.io/${REPO_LOWER}/back:latest
 
           # Build app
-          docker build -t ghcr.io/${{ github.repository }}/app:latest ./app \
+          docker build -t ghcr.io/${REPO_LOWER}/app:latest ./app \
             --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} \
             --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }}
-          docker push ghcr.io/${{ github.repository }}/app:latest
+          docker push ghcr.io/${REPO_LOWER}/app:latest
 
           # Build landing
-          docker build -t ghcr.io/${{ github.repository }}/landing:latest ./landing \
+          docker build -t ghcr.io/${REPO_LOWER}/landing:latest ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }}
-          docker push ghcr.io/${{ github.repository }}/landing:latest
+          docker push ghcr.io/${REPO_LOWER}/landing:latest
 
       - name: Deploy to production server
         uses: appleboy/ssh-action@v1.0.3
