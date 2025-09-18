@@ -1,0 +1,39 @@
+services:
+  back:
+    image: ghcr.io/${GITHUB_REPOSITORY:-crypte/ardent}/back:${IMAGE_TAG:-staging}
+    expose:
+      - "8080"
+    environment:
+      - NODE_ENV=staging
+    volumes:
+      - pb_data_staging:/pb/pb_data
+    networks:
+      - app-network
+      - caddy-net
+
+  app:
+    image: ghcr.io/${GITHUB_REPOSITORY:-crypte/ardent}/app:${IMAGE_TAG:-staging}
+    expose:
+      - "80"
+    environment:
+      - NODE_ENV=staging
+    networks:
+      - app-network
+      - caddy-net
+
+  landing:
+    image: ghcr.io/${GITHUB_REPOSITORY:-crypte/ardent}/landing:${IMAGE_TAG:-staging}
+    expose:
+      - "80"
+    environment:
+      - NODE_ENV=staging
+    networks:
+      - app-network
+      - caddy-net
+
+volumes:
+  pb_data_staging:
+
+networks:
+  caddy-net:
+    external: true

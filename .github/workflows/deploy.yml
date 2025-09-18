@@ -1,17 +1,58 @@
-name: Auto Deploy
+name: Build and Deploy
 
 on:
   push:
     branches: [master, staging]
 
 jobs:
-  deploy-preprod:
+  build-and-deploy-preprod:
     if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
     environment: preprod
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push images
+        run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
+          # Build backend
+          docker build -t ghcr.io/${REPO_LOWER}/back:staging ./back
+          docker push ghcr.io/${REPO_LOWER}/back:staging
+
+          # Build app
+          docker build -t ghcr.io/${REPO_LOWER}/app:staging ./app \
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} \
+            --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }}
+          docker push ghcr.io/${REPO_LOWER}/app:staging
+
+          # Build landing
+          docker build -t ghcr.io/${REPO_LOWER}/landing:staging ./landing \
+            --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }}
+          docker push ghcr.io/${REPO_LOWER}/landing:staging
+
+      - name: Copy docker-compose files to staging
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "docker-compose.yml,docker-compose.staging.yml"
+          target: "/root/infra/Ardent/"
 
       - name: Deploy to preprod server
         uses: appleboy/ssh-action@v1.0.3
@@ -21,17 +62,65 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /root/infra/Ardent
-            docker-compose down
-            git pull origin staging
-            ./deploy.sh staging
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-  deploy-prod:
+            # Set environment variables for docker-compose
+            export GITHUB_REPOSITORY=crypte/ardent
+            export IMAGE_TAG=staging
+
+            # Pull, stop and restart services
+            docker-compose -f docker-compose.yml -f docker-compose.staging.yml pull
+            docker-compose -f docker-compose.yml -f docker-compose.staging.yml down
+            docker-compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+
+  build-and-deploy-prod:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push images
+        run: |
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
+          # Build backend
+          docker build -t ghcr.io/${REPO_LOWER}/back:latest ./back
+          docker push ghcr.io/${REPO_LOWER}/back:latest
+
+          # Build app
+          docker build -t ghcr.io/${REPO_LOWER}/app:latest ./app \
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} \
+            --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }}
+          docker push ghcr.io/${REPO_LOWER}/app:latest
+
+          # Build landing
+          docker build -t ghcr.io/${REPO_LOWER}/landing:latest ./landing \
+            --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }}
+          docker push ghcr.io/${REPO_LOWER}/landing:latest
+
+      - name: Copy docker-compose files to production
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "docker-compose.yml,docker-compose.prod.yml"
+          target: "/root/infra/Ardent/"
 
       - name: Deploy to production server
         uses: appleboy/ssh-action@v1.0.3
@@ -41,6 +130,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /root/infra/Ardent
-            docker-compose down
-            git pull origin master
-            ./deploy.sh prod
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Set environment variables for docker-compose
+            export GITHUB_REPOSITORY=crypte/ardent
+            export IMAGE_TAG=latest
+
+            # Pull, stop and restart services
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
