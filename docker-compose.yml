@@ -1,33 +1,19 @@
 services:
-  backend:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+  back:
     container_name: ${PROJECT_NAME:-ardent}-backend
     networks:
       - app-network
     restart: unless-stopped
 
   app:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-      args:
-        - VITE_PB_URL=${VITE_PB_URL}
-        - VITE_LANDING_URL=${VITE_LANDING_URL}
     container_name: ${PROJECT_NAME:-ardent}-app
     networks:
       - app-network
     depends_on:
-      - backend
+      - back
     restart: unless-stopped
 
   landing:
-    build:
-      context: ./landing
-      dockerfile: Dockerfile
-      args:
-        - VITE_APP_URL=${VITE_APP_URL}
     container_name: ${PROJECT_NAME:-ardent}-landing
     networks:
       - app-network
@@ -36,6 +22,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  pb_data:
