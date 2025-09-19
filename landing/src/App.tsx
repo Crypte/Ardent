@@ -7,8 +7,8 @@ import {
 import Home from "@/pages/Home.tsx";
 import NotFound from "@/pages/NotFound.tsx";
 import Legal from "@/pages/Legal.tsx";
-import HomeLayout from "../layout/HomeLayout.tsx";
-import ContentLayout from "../layout/ContentLayout.tsx";
+import HomeLayout from "@/layout/HomeLayout.tsx";
+import ContentLayout from "@/layout/ContentLayout.tsx";
 import LivreBlanc from "@/pages/LivreBlanc.tsx";
 
 function App() {
