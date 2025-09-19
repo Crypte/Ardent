@@ -5,7 +5,7 @@ export default function Footer() {
         <footer className="w-full text-sm text-muted-foreground">
             <div className="flex flex-col items-center justify-between gap-4 py-4 px-6 md:flex-row">
                 <div className="flex flex-col items-center gap-4 md:flex-row md:gap-6">
-                    <Link target={'_blank'} to={`${import.meta.env.VITE_LANDING_URL}`} className="text-center md:text-left">
+                    <Link target={'_blank'} to={`${import.meta.env.VITE_LANDING_URL}/legal`} className="text-center md:text-left">
                         Informations légales
                     </Link>
                 </div>

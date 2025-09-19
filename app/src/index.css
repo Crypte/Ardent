@@ -47,10 +47,10 @@
     --sidebar-ring: oklch(0.708 0 0);
     
     /* Couleurs des ressources */
-    --resource-event: hsl(173, 35%, 42%);
-    --resource-anecdote: hsl(19, 69%, 52%);
-    --resource-keynumber: hsl(38, 59%, 47%);
-    --resource-vocabulaire: hsl(198, 45%, 47%);
+    --event: hsl(173, 35%, 42%);
+    --anecdote: hsl(19, 69%, 52%);
+    --keynumber: hsl(38, 59%, 47%);
+    --vocabulaire: hsl(198, 45%, 47%);
 }
 
 .dark {
@@ -127,10 +127,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Couleurs des ressources */
-  --color-resource-event: var(--resource-event);
-  --color-resource-anecdote: var(--resource-anecdote);
-  --color-resource-keynumber: var(--resource-keynumber);
-  --color-resource-vocabulaire: var(--resource-vocabulaire);
+  --color-event: var(--event);
+  --color-anecdote: var(--anecdote);
+  --color-keynumber: var(--keynumber);
+  --color-vocabulaire: var(--vocabulaire);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
