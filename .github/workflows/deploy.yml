@@ -43,7 +43,7 @@ jobs:
           # Build landing
           docker build -t ghcr.io/${REPO_LOWER}/landing:staging ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }} \
-            --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }} 
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} 
           docker push ghcr.io/${REPO_LOWER}/landing:staging
 
       - name: Copy docker-compose files to staging
@@ -112,7 +112,7 @@ jobs:
           # Build landing
           docker build -t ghcr.io/${REPO_LOWER}/landing:latest ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }} \
-            --build-arg VITE_LANDING_URL=${{ secrets.VITE_LANDING_URL }} 
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} 
           docker push ghcr.io/${REPO_LOWER}/landing:latest
 
       - name: Copy docker-compose files to production
