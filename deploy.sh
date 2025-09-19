@@ -27,4 +27,3 @@ fi
 
 echo "✅ Déploiement terminé"
 echo "📊 Status des conteneurs:"
-docker-compose ps
