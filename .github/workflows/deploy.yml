@@ -2,11 +2,12 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [master, staging]
+    branches: [master]
+    tags: ['v*']
 
 jobs:
   build-and-deploy-preprod:
-    if: github.ref == 'refs/heads/staging'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: preprod
     permissions:
@@ -43,10 +44,10 @@ jobs:
           # Build landing
           docker build -t ghcr.io/${REPO_LOWER}/landing:staging ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }} \
-            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} 
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }}
           docker push ghcr.io/${REPO_LOWER}/landing:staging
 
-      - name: Copy docker-compose files to staging
+      - name: Copy docker-compose files to preprod
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -66,7 +67,7 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Set environment variables for docker-compose
-            export GITHUB_REPOSITORY=crypte/ardent
+            export GITHUB_REPOSITORY=${{ github.repository }}
             export IMAGE_TAG=staging
 
             # Pull, stop and restart services
@@ -75,7 +76,7 @@ jobs:
             docker-compose -f docker-compose.yml -f docker-compose.staging.yml up -d
 
   build-and-deploy-prod:
-    if: github.ref == 'refs/heads/master'
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     environment: production
     permissions:
@@ -135,7 +136,7 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Set environment variables for docker-compose
-            export GITHUB_REPOSITORY=crypte/ardent
+            export GITHUB_REPOSITORY=${{ github.repository }}
             export IMAGE_TAG=latest
 
             # Pull, stop and restart services
