@@ -44,10 +44,10 @@ jobs:
           # Build landing
           docker build -t ghcr.io/${REPO_LOWER}/landing:staging ./landing \
             --build-arg VITE_APP_URL=${{ secrets.VITE_APP_URL }} \
-            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }}
+            --build-arg VITE_PB_URL=${{ secrets.VITE_PB_URL }} 
           docker push ghcr.io/${REPO_LOWER}/landing:staging
 
-      - name: Copy docker-compose files to preprod
+      - name: Copy docker-compose files to staging
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -67,7 +67,7 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Set environment variables for docker-compose
-            export GITHUB_REPOSITORY=${{ github.repository }}
+            export GITHUB_REPOSITORY=crypte/ardent
             export IMAGE_TAG=staging
 
             # Pull, stop and restart services
@@ -136,7 +136,7 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Set environment variables for docker-compose
-            export GITHUB_REPOSITORY=${{ github.repository }}
+            export GITHUB_REPOSITORY=crypte/ardent
             export IMAGE_TAG=latest
 
             # Pull, stop and restart services
