@@ -13,6 +13,9 @@ RUN unzip /tmp/pb.zip -d /pb/ && rm /tmp/pb.zip
 # Copy hooks if they exist
 COPY ./pb_hooks /pb/pb_hooks
 
+# Copy migrations for auto-apply
+COPY ./pb_migrations /pb/pb_migrations
+
 # Create data directory
 RUN mkdir -p /pb/pb_data
 

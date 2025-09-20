@@ -3,61 +3,51 @@ export interface Theme {
     name: string
 }
 
-export interface Event {
-    id: string
-    title: string
-    content:string
-    place:string
-    date:string
-}
-
-export interface Anecdote {
-    id: string
-    title: string
-    content:string
-}
-
-export interface Keynumber {
-    id: string
-    number:string
-    content:string
-}
-
-export interface Vocabulaire {
-    id: string
-    word: string
-    definition:string
-    masculin:boolean
-    usage:string[]
-}
-
-// Type pour ressource_view avec relations JSON et métriques
+// Type pour ressource_view avec cards array et métriques
 export type Ressource = {
     // Attributs de base
     id: string
-    resource_id: string
     title: string
     published: boolean
     content: string
     source?: string[]
     created: string
     updated: string
-    
+
     // Informations du thème (directement en string)
     theme_name: string
-    
+
     // Métriques ajoutées dans ressource_view
     view_count: number
     unique_viewers: number
-    
-    // Relations en JSON (peuvent être null)
-    event?: Event | null
-    vocabulaire?: Vocabulaire | null
-    anecdote?: Anecdote | null
-    keynumber?: Keynumber | null
-    
+
+    // Cards consolidées dans un array
+    cards: RessourceCard[]
+
     // Infos de vue utilisateur (optionnelles pour rétrocompatibilité)
     is_viewed?: boolean
     viewed_at?: string | null
 }
+
+export interface RessourceCard {
+    id: string
+    type: 'vocabulaire' | 'event' | 'anecdote' | 'keynumber'
+    title: string
+    content: string
+    metadata: {
+        // Pour type 'event'
+        place?: string
+        date?: string
+
+        // Pour type 'keynumber'
+        number?: string
+
+        // Pour type 'vocabulaire'
+        word?: string
+        definition?: string
+        genre?: 'masculin' | 'féminin'
+        usage?: string[]
+    } | null
+}
+
 

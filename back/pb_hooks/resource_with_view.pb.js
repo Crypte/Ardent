@@ -33,6 +33,18 @@ routerAdd("GET", "/api/ressource-with-view/{id}", (c) => {
             }
         }
 
+        // Parse the cards JSON array from the view
+        let cards = []
+        try {
+            const cardsJson = ressource.get("cards")
+            if (cardsJson && cardsJson !== '[]') {
+                cards = JSON.parse(cardsJson)
+            }
+        } catch (err) {
+            console.log("Error parsing cards JSON:", err)
+            cards = []
+        }
+
         const response = {
             id: ressource.get("id"),
             title: ressource.get("title"),
@@ -42,10 +54,9 @@ routerAdd("GET", "/api/ressource-with-view/{id}", (c) => {
             created: ressource.get("created"),
             updated: ressource.get("updated"),
             theme_name: ressource.get("theme_name"),
-            event: ressource.get("event"),
-            anecdote: ressource.get("anecdote"),
-            keynumber: ressource.get("keynumber"),
-            vocabulaire: ressource.get("vocabulaire"),
+            view_count: ressource.get("view_count") || 0,
+            unique_viewers: ressource.get("unique_viewers") || 0,
+            cards: cards,
             is_viewed: isViewed,
             viewed_at: viewedAt
         }
