@@ -13,7 +13,7 @@ export default function Navbar() {
                     {/* Bouton App */}
                     <Button asChild>
                         <Link to={`${import.meta.env.VITE_APP_URL}`}>
-                            Commencer
+                            Accéder à l'app
                         </Link>
                     </Button>
                 </nav>

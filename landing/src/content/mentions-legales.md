@@ -1,5 +1,3 @@
-# Mentions légales
-
 ## Éditeur du site
 
 **Raison sociale :** Ardent Education  

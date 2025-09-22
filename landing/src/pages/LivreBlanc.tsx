@@ -1,6 +1,6 @@
-import MarkdownRenderer from "@/components/MarkdownRenderer.tsx"
 import PageHeader from "@/components/PageHeader.tsx";
 import {Card, CardContent} from "@/components/ui/card.tsx";
+import StaticMarkdownRenderer from "@/components/StaticMarkdownRenderer.tsx";
 
 export default function LivreBlanc() {
     return (
@@ -8,7 +8,7 @@ export default function LivreBlanc() {
         <PageHeader title={"Livre Blanc"} subtitle={"Consultez notre manifesto et pourquoi Ardent"} />
         <Card>
             <CardContent>
-                <MarkdownRenderer
+                <StaticMarkdownRenderer
                     filePath="livre-blanc"
                     fallbackContent="# Conditions d'utilisation\n\nContenu non disponible pour le moment."
                     className="prose max-w-none"

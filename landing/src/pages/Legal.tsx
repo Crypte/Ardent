@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import MarkdownRenderer from "@/components/MarkdownRenderer.tsx"
+import StaticMarkdownRenderer from "@/components/StaticMarkdownRenderer.tsx"
 import PageHeader from "@/components/PageHeader.tsx";
 
 export default function Legal() {
@@ -24,7 +24,7 @@ export default function Legal() {
           </TabsList>
 
           <TabsContent value="terms" className="space-y-6 mt-6">
-            <MarkdownRenderer 
+            <StaticMarkdownRenderer
               filePath="conditions-utilisation"
               fallbackContent="# Conditions d'utilisation\n\nContenu non disponible pour le moment."
               className="prose max-w-none"
@@ -32,7 +32,7 @@ export default function Legal() {
           </TabsContent>
 
           <TabsContent value="privacy" className="space-y-6 mt-6">
-            <MarkdownRenderer 
+            <StaticMarkdownRenderer
               filePath="politique-confidentialite"
               fallbackContent="# Politique de confidentialité\n\nContenu non disponible pour le moment."
               className="prose max-w-none"
@@ -40,7 +40,7 @@ export default function Legal() {
           </TabsContent>
 
           <TabsContent value="legal-info" className="space-y-6 mt-6">
-            <MarkdownRenderer 
+            <StaticMarkdownRenderer
               filePath="mentions-legales"
               fallbackContent="# Mentions légales\n\nContenu non disponible pour le moment."
               className="prose max-w-none"
