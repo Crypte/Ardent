@@ -1,16 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import MarkdownRenderer from "@/components/MarkdownRenderer.tsx"
+import PageHeader from "@/components/PageHeader.tsx";
 
 export default function Legal() {
   return (
-    <div className="min-h-screen bg-background">
       <div className="space-y-8 py-8">
-        <div className="mb-12">
-          <h1 className="text-3xl font-bold mb-2">Informations légales</h1>
-          <p className="text-muted-foreground">
-            Consultez nos conditions d'utilisation, notre politique de confidentialité et nos mentions légales
-          </p>
-        </div>
+        <PageHeader title={"Informations légales"} subtitle={"Consultez nos conditions d'utilisation, notre politique de confidentialité et nos mentions légales"} />
 
         <Tabs defaultValue="terms" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
@@ -53,6 +48,5 @@ export default function Legal() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
   )
 }

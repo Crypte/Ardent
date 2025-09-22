@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
     return (
-        <nav className="w-screen sticky top-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="flex justify-between items-center container">
+        <header className="w-screen sticky py-2.5 top-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <nav className="flex justify-between items-center container">
                     {/* Logo */}
                     <Link to="/" className="flex items-center">
                         <img className="h-8" src="/ArdentLogo.png" alt="Ardent Logo" />
@@ -16,7 +16,7 @@ export default function Navbar() {
                             Commencer
                         </Link>
                     </Button>
-                </div>
-        </nav>
+                </nav>
+        </header>
     );
 }

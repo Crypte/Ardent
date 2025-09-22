@@ -24,20 +24,16 @@ export default function Home() {
     }, [id, randomId, navigate])
 
     // isViewed vient directement de la ressource
-    const isViewed = ressource?.is_viewed ?? null
+    const isViewed = ressource?.is_viewed ?? false
     const isRedirecting = !id && !randomId
 
     // Si en cours de redirection vers un ID aléatoire
-    if (isRedirecting) return <RessourceSkeleton />
-
-    // Si ressource en cours de chargement
-    if (loading) return <RessourceSkeleton />
+    if (isRedirecting || loading) {
+        return <RessourceSkeleton />
+    }
 
     // Si pas de ressource ou erreur
     if (error || !ressource) return <EmptyResourceCard />
-
-    // Si isViewed n'est pas encore déterminé, attendre
-    if (isViewed === null) return <RessourceSkeleton />
 
     return (
         <>

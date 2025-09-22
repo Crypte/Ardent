@@ -16,7 +16,7 @@ export default function HeroCard() {
                         <img className={'h-9'} src={'/ArdentLogo.png'} alt="Ardent Logo" />
                         <Badge variant={'secondary'}>Gratuit</Badge>
                     </div>
-                    <h1 className={'text-7xl italic font-bold'}>L'ignorance n'est plus une option</h1>
+                    <h1 className={'text-6xl italic font-bold'}>L'ignorance n'est plus une option</h1>
                     <p className="text-muted-foreground font-light">
                         Accéder à la plus grande base de données de savoir
                     </p>

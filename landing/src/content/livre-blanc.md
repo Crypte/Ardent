@@ -1,4 +1,3 @@
-# Livre Blanc Ardent
 ## Révolutionner l'Accès au Savoir
 
 ### Introduction
