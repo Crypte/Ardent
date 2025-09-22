@@ -19,6 +19,7 @@ import Profile from "@/pages/Profile"
 import Home from "@/pages/Home.tsx"
 import About from "@/pages/About"
 import NotFound from "@/pages/NotFound.tsx";
+import Proposal from "@/pages/Proposal.tsx";
 
 export function AppRoutes() {
     return (
@@ -44,6 +45,7 @@ export function AppRoutes() {
                 <Route path="profile" element={<Profile />} />
                 {/* Page À propos */}
                 <Route path="about" element={<About />} />
+                <Route path="proposal" element={<Proposal />} />
 
                 <Route path="*" element={<NotFound />} />
             </Route>

@@ -1,50 +1,60 @@
-import React, { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
+import { useForm, FormProvider } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 import { Loader2, CheckCircle, XCircle } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { toast } from "sonner"
-import { useFormValidation } from "@/hooks/useFormValidation"
 import { PASSWORD_REQUIREMENTS } from "@/constants/auth"
+import FieldBlock from "@/components/FieldBlock"
 
 interface ResetPasswordProps {
     token: string | null
 }
 
+interface ResetPasswordFormData {
+    password: string
+    confirmPassword: string
+}
+
+const isStrongPassword = (password: string) => {
+    return PASSWORD_REQUIREMENTS.every((req) => req.regex.test(password))
+}
+
+const schema = yup
+    .object({
+        password: yup
+            .string()
+            .required("Le mot de passe est obligatoire")
+            .test("strong-password", "Le mot de passe ne respecte pas les critères", isStrongPassword),
+        confirmPassword: yup
+            .string()
+            .required("La confirmation est obligatoire")
+            .oneOf([yup.ref('password')], "Les mots de passe doivent être identiques")
+    })
+    .required()
+
 export default function ResetPasswordForm({ token }: ResetPasswordProps) {
     const navigate = useNavigate()
     const { confirmPasswordReset } = useAuth()
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
-    const passwordRef = useRef<HTMLInputElement>(null)
+
+    const methods = useForm<ResetPasswordFormData>({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            password: '',
+            confirmPassword: ''
+        }
+    })
 
     const {
-        markAsTouched
-    } = useFormValidation(
-        { password, confirmPassword },
-        {},
-        300 // 300ms debounce
-    )
-
-    const isStrongPassword = (password: string) => {
-        return PASSWORD_REQUIREMENTS.every((req) => req.regex.test(password))
-    }
+        handleSubmit,
+        formState: { isValid, isSubmitting }
+    } = methods
 
     const hasValidToken = !!token
-    const isFormValid = hasValidToken && isStrongPassword(password) && password === confirmPassword
-
-    // Auto-focus sur le premier champ au montage
-    useEffect(() => {
-        if (hasValidToken) {
-            const timer = setTimeout(() => {
-                passwordRef.current?.focus()
-            }, 100)
-            return () => clearTimeout(timer)
-        }
-    }, [hasValidToken])
 
     useEffect(() => {
         if (!token) {
@@ -54,16 +64,11 @@ export default function ResetPasswordForm({ token }: ResetPasswordProps) {
         }
     }, [token])
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const onSubmit = async (data: ResetPasswordFormData) => {
+        if (!hasValidToken) return
 
-        if (!isFormValid) {
-            return
-        }
-        
-        setIsLoading(true)
         try {
-            const result = await confirmPasswordReset(token!, password, confirmPassword)
+            const result = await confirmPasswordReset(token!, data.password, data.confirmPassword)
             if (result.success) {
                 setIsSubmitted(true)
                 setTimeout(() => {
@@ -72,16 +77,12 @@ export default function ResetPasswordForm({ token }: ResetPasswordProps) {
             }
         } catch {
             // Les erreurs sont gérées par le contexte AuthContext
-        } finally {
-            setIsLoading(false)
         }
     }
 
     const goToLogin = () => {
         navigate("/login")
     }
-
-    const isFormDisabled = isLoading
 
     if (isSubmitted) {
         return (
@@ -161,9 +162,9 @@ export default function ResetPasswordForm({ token }: ResetPasswordProps) {
     }
 
     return (
-        <div className="flex flex-col gap-6 max-w-md">
-            <form onSubmit={handleSubmit} noValidate>
-                <div className="flex flex-col gap-6">
+        <FormProvider {...methods}>
+            <div className="flex flex-col gap-6 max-w-md">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
                     <div className="flex flex-col items-center gap-2">
                         <img src={'/ArdentLogo.png'} alt={'ArdentLogo'} className={'h-12'}/>
                         <div className="text-center">
@@ -174,68 +175,45 @@ export default function ResetPasswordForm({ token }: ResetPasswordProps) {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-3">
-                            <Input
-                                ref={passwordRef}
-                                id="password"
-                                type="password"
-                                label="Nouveau mot de passe"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                onBlur={() => markAsTouched('password')}
-                                required
-                                disabled={isFormDisabled}
-                                className={!password ? '' : !isStrongPassword(password) ? 'border-red-500 focus-visible:ring-red-500' : ''}
-                            />
-                            <p className={`text-xs ${!password ? 'text-muted-foreground' : isStrongPassword(password) ? 'text-green-600' : 'text-red-500'}`}>
-                                Au moins 8 caractères avec majuscule, minuscule et chiffre
-                            </p>
-                        </div>
+                    <FieldBlock
+                        name="password"
+                        label="Nouveau mot de passe"
+                        type="password"
+                        placeholder="••••••••"
+                        indication="Au moins 10 caractères avec 1 chiffre, 1 minuscule, 1 majuscule et 1 caractère spécial"
+                    />
 
-                        <div className="grid gap-3">
-                            <Input
-                                id="confirmPassword"
-                                type="password"
-                                label="Confirmer le mot de passe"
-                                placeholder="••••••••"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                onBlur={() => markAsTouched('confirmPassword')}
-                                required
-                                disabled={isFormDisabled}
-                                className={!confirmPassword ? '' : password !== confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}
-                            />
-                            <p className={`text-xs ${!confirmPassword ? 'text-muted-foreground' : password === confirmPassword ? 'text-green-600' : 'text-red-500'}`}>
-                                Les mots de passe doivent être identiques
-                            </p>
-                        </div>
+                    <FieldBlock
+                        name="confirmPassword"
+                        label="Confirmer le mot de passe"
+                        type="password"
+                        placeholder="••••••••"
+                        indication="Les mots de passe doivent être identiques"
+                    />
 
-                        <Button 
-                            type="submit" 
-                            className="w-full"
-                            disabled={isFormDisabled || !isFormValid}
-                        >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Réinitialisation...
-                                </>
-                            ) : (
-                                "Réinitialiser le mot de passe"
-                            )}
-                        </Button>
-                    </div>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isSubmitting || !isValid}
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Réinitialisation...
+                            </>
+                        ) : (
+                            "Réinitialiser le mot de passe"
+                        )}
+                    </Button>
+                </form>
+
+                <div className="text-muted-foreground text-center text-xs text-balance">
+                    Des problèmes avec la réinitialisation ?{" "}
+                    <a href="mailto:support@ardent-projet.fr" className="underline underline-offset-4 hover:text-primary">
+                        Contactez-nous
+                    </a>
                 </div>
-            </form>
-
-            <div className="text-muted-foreground text-center text-xs text-balance">
-                Des problèmes avec la réinitialisation ?{" "}
-                <a href="mailto:support@ardent-projet.fr" className="underline underline-offset-4 hover:text-primary">
-                    Contactez-nous
-                </a>
             </div>
-        </div>
+        </FormProvider>
     )
 }

@@ -2,8 +2,12 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-  return (
+interface TextareaProps extends React.ComponentProps<"textarea"> {
+  label?: string
+}
+
+function Textarea({ className, label, ...props }: TextareaProps) {
+  const textareaElement = (
     <textarea
       data-slot="textarea"
       className={cn(
@@ -13,6 +17,19 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
       {...props}
     />
   )
+
+  if (label) {
+    return (
+      <div className="grid gap-2">
+        <label htmlFor={props.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          {label}
+        </label>
+        {textareaElement}
+      </div>
+    )
+  }
+
+  return textareaElement
 }
 
 export { Textarea }

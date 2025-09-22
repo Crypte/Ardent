@@ -17,7 +17,7 @@ export default function RessourceSource({source}: {source: string[]}) {
                         >
                             <Badge variant={'secondary'} className={"hover:underline flex items-center gap-2 truncate p-0.5 pr-2 rounded-full group"}>
                             <FaviconPreview url={url} />
-                            <span className="truncate">{url}</span>
+                            <span className="truncate">{new URL(url).hostname}</span>
                             <ExternalLink className="size-4" />
                             </Badge>
                         </Link>

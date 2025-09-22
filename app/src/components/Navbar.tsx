@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import {ArrowRightIcon, CircleUser, LogOutIcon, Menu} from "lucide-react"
+import {ArrowRightIcon, BookOpen, CircleUser, LogOutIcon, Menu} from "lucide-react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet"
 import { useAuth } from "@/contexts/AuthContext"
 import {
@@ -12,28 +12,21 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {navigationMenuTriggerStyle} from "@/components/ui/navigation-menu.tsx";
-import {useEffect, useState} from "react";
+
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function Navbar() {
     const {user, logout } = useAuth()
     const location = useLocation()
-    const [isScrolled, setIsScrolled] = useState(false)
-
     // Si on est déjà sur une route /random, le logo ne fait rien, sinon redirige vers /
     const isOnRandomRoute = location.pathname.startsWith('/random')
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollPosition = window.scrollY
-            setIsScrolled(scrollPosition > 0)
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-
     return (
-        <nav className={`sticky w-full top-0 z-50 py-2 bg-background backdrop-blur-xl shadow-sm transition-all duration-200 ${isScrolled ? 'border-b' : ''}`}>
+        <nav className="sticky w-screen top-0 z-50 py-2.5 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex items-center justify-between container mx-auto">
                 <div className="flex items-center">
                     <Link 
@@ -45,9 +38,20 @@ export default function Navbar() {
                     </Link>
                 </div>
                 
-                <div className={'flex items-center space-x-5 max-xl:hidden'}>
-
-                    <Link className={navigationMenuTriggerStyle()} to="/about">À propos</Link>
+                <div className={'flex items-center space-x-4 max-xl:hidden'}>
+                    <div className={'flex items-center space-x-1'}>
+                        <Link className={navigationMenuTriggerStyle()} to="/proposal ">Proposer un sujet</Link>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button asChild variant={'ghost'}>
+                                <Link to="/about"><BookOpen/></Link>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>A propos</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button>
