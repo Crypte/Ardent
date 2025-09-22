@@ -5,8 +5,8 @@ import {Link} from "react-router-dom";
 export default function NotFound() {
 
     return (
-        <div className="flex items-center justify-center bg-background">
-            <Card className="w-full max-w-md">
+        <div className="flex items-center justify-center bg-background flex-1">
+            <Card>
                 <CardHeader>
                     <CardTitle className="text-center text-4xl font-bold">404</CardTitle>
                 </CardHeader>

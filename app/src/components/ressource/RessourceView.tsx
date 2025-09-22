@@ -4,10 +4,8 @@ import RessourceContent from "@/components/ressource/RessourceContent.tsx";
 import RessourceSource from "@/components/ressource/RessourceSource.tsx";
 import RessourceCard from "@/components/ressource/RessourceCard.tsx";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCurrentResource } from "@/contexts/CurrentResourceContext";
 
-export default function RessourceView({ ressource }: { ressource: Ressource }) {
-    const { isViewed } = useCurrentResource();
+export default function RessourceView({ ressource, isViewed }: { ressource: Ressource; isViewed: boolean }) {
 
     return (
         <AnimatePresence mode="wait">

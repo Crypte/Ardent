@@ -1,9 +1,8 @@
-import { Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { PublicOnlyRoute } from "@/components/auth/PublicOnlyRoute"
 import AppLayout from "@/layout/AppLayout"
 import AuthLayout from "@/layout/AuthLayout"
-import ContentLayout from "@/layout/ContentLayout.tsx"
 
 // Pages publiques
 import ResetPassword from "@/pages/ResetPassword"
@@ -31,22 +30,19 @@ export function AppRoutes() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="reset-password" element={<ResetPassword />} />
                 <Route path="confirm-email" element={<ConfirmEmail />} />
+                <Route path="*" element={<NotFound />} />
             </Route>
 
             {/* Routes protégées (auth requise) */}
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-                {/* Redirection de la racine vers /random */}
-                <Route path="/" element={<Navigate to="/random" replace />} />
-                <Route path="random" element={<ContentLayout />}>
-                    <Route index element={<Home />} />
-                    <Route path=":id" element={<Home />} />
-                </Route>
+                {/* Page d'accueil à la racine */}
+                <Route path="/" element={<Home />} />
+                <Route path="/:id" element={<Home />} />
                 {/* Profil utilisateur */}
                 <Route path="profile" element={<Profile />} />
                 {/* Page À propos */}
                 <Route path="about" element={<About />} />
                 <Route path="proposal" element={<Proposal />} />
-
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>

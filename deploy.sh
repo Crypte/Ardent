@@ -26,4 +26,3 @@ else
 fi
 
 echo "✅ Déploiement terminé"
-echo "📊 Status des conteneurs:"

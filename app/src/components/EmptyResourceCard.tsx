@@ -1,24 +1,31 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileX } from "lucide-react"
+import { Card, CardContent, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { FileX, RotateCcw } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export function EmptyResourceCard() {
-    
+    const navigate = useNavigate()
+
+    const handleNewResource = () => {
+        navigate("/")
+    }
+
     return (
-        <Card className="border-gray-200 dark:border-gray-700 shadow-sm">
-            <CardHeader className="text-center pb-3">
-                <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                    <FileX className="h-6 w-6 text-gray-400" />
+        <Card className="shadow-sm py-30 border-dashed border-tertiary-foreground flex-grow">
+            <CardContent className="text-center space-y-10">
+                <div className="flex flex-col items-center space-y-3">
+                    <FileX className="size-10 text-gray-400" />
+                    <CardTitle className="">
+                        Oops, aucune ressource trouvée pour cet ID
+                    </CardTitle>
                 </div>
-                <CardTitle className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                    Aucune ressource trouvée
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center pt-0">
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                    Cette ressource n'existe pas ou n'est plus disponible.
-                    <br />
-                    Essayons de trouver autre chose d'intéressant !
-                </p>
+                <Button
+                    onClick={handleNewResource}
+                    variant="default"
+                >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Découvrir une nouvelle ressource
+                </Button>
             </CardContent>
         </Card>
     )

@@ -22,7 +22,7 @@ export function useNavigationState() {
     const navigateToRandomResource = useCallback(async () => {
         try {
             const newId = await refetch(currentId, excludeViewed)
-            navigate(`/random/${newId}`)
+            navigate(`/${newId}`)
             setAllViewed(false)
         } catch (error) {
             if (error instanceof Error && error.message === "NO_UNVIEWED_RESOURCES") {
@@ -44,7 +44,7 @@ export function useNavigationState() {
                 const newId = await refetch(currentId, true)
                 // S'il y a des ressources non vues et qu'on est sur une ressource déjà vue, naviguer
                 if (currentId && isViewedFn(currentId)) {
-                    navigate(`/random/${newId}`)
+                    navigate(`/${newId}`)
                 }
             } catch (error) {
                 if (error instanceof Error && error.message === "NO_UNVIEWED_RESOURCES") {

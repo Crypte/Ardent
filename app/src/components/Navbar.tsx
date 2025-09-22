@@ -26,7 +26,7 @@ export default function Navbar() {
     const isOnRandomRoute = location.pathname.startsWith('/random')
 
     return (
-        <nav className="sticky w-screen top-0 z-50 py-2.5 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <nav className="sticky w-full top-0 z-50 py-2.5 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex items-center justify-between container mx-auto">
                 <div className="flex items-center">
                     <Link 
