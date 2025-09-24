@@ -242,9 +242,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         pb.authStore.clear()
         setUser(null)
         userCache.current = { data: null, timestamp: 0 }
-        toast.success(AUTH_MESSAGES.LOGOUT_SUCCESS, {
-            description: AUTH_MESSAGES.LOGOUT_SUCCESS_DESC,
-        })
     }
 
     // Méthode pour demander une réinitialisation de mot de passe

@@ -2,7 +2,7 @@ services:
   back:
     image: ghcr.io/${GITHUB_REPOSITORY:-crypte/ardent}/back:${IMAGE_TAG:-staging}
     expose:
-      - "8080"
+      - "8090"
     environment:
       - NODE_ENV=staging
     volumes:
