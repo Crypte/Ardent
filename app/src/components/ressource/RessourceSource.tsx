@@ -3,21 +3,52 @@ import {ExternalLink} from "lucide-react";
 import {Link} from "react-router-dom";
 import {Badge} from "@/components/ui/badge.tsx";
 
+function isValidUrl(url: string): boolean {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        try {
+            new URL(`https://${url}`);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+}
+
+function getUrlHostname(url: string): string {
+    try {
+        return new URL(url).hostname;
+    } catch {
+        try {
+            return new URL(`https://${url}`).hostname;
+        } catch {
+            return url;
+        }
+    }
+}
 
 export default function RessourceSource({source}: {source: string[]}) {
+    const validSources = source.filter(isValidUrl);
+
+    if (validSources.length === 0) {
+        return null;
+    }
+
     return(
         <div className="mt-8 space-y-3">
             <h1 className="font-bold text-xl italic">Sources :</h1>
                 <ul className="flex items-center gap-2">
-                    {source.map((url, index) => (
+                    {validSources.map((url, index) => (
                         <Link
                             key={index}
-                            to={url}
+                            to={url.startsWith('http') ? url : `https://${url}`}
                             target="_blank"
                         >
                             <Badge variant={'secondary'} className={"hover:underline flex items-center gap-2 truncate p-0.5 pr-2 rounded-full group"}>
                             <FaviconPreview url={url} />
-                            <span className="truncate">{new URL(url).hostname}</span>
+                            <span className="truncate">{getUrlHostname(url)}</span>
                             <ExternalLink className="size-4" />
                             </Badge>
                         </Link>
@@ -33,19 +64,19 @@ function FaviconPreview({ url}: {url: string}) {
     const [faviconError, setFaviconError] = useState<boolean>(false);
 
     useEffect(() => {
-        try {
-            const domain = new URL(url).hostname;
+        const domain = getUrlHostname(url);
+        if (domain && domain !== url) {
             setFaviconUrl(`https://${domain}/favicon.ico`);
-        } catch {
+        } else {
             setFaviconError(true);
         }
     }, [url]);
 
     const handleFaviconError = () => {
-        try {
-            const domain = new URL(url).hostname;
+        const domain = getUrlHostname(url);
+        if (domain && domain !== url) {
             setFaviconUrl(`https://www.google.com/s2/favicons?domain=${domain}`);
-        } catch {
+        } else {
             setFaviconError(true);
         }
     };
