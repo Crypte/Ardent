@@ -4,6 +4,7 @@ import {Card, CardContent, CardFooter} from "@/components/ui/card.tsx";
 import Social from "@/components/Social.tsx";
 import {Badge} from "@/components/ui/badge.tsx"
 import {useStats} from "@/hooks/useStats.ts";
+import {ArrowRight} from "lucide-react";
 
 export default function HeroCard() {
     const { stats, loading, error } = useStats();
@@ -49,12 +50,12 @@ export default function HeroCard() {
                     </div>
                 </div>
             </CardContent>
-            <CardFooter className={'flex flex-col gap-3'}>
-                <Button asChild className={'w-full'}>
-                    <Link to={`${import.meta.env.VITE_APP_URL}`}>Accéder à l'app</Link>
-                </Button>
-                <Button asChild className={'w-full'} variant={'secondary'}>
+            <CardFooter className={'flex gap-3 justify-center'}>
+                <Button asChild variant={'secondary'}>
                     <Link to="/livre-blanc">Lire le livre blanc</Link>
+                </Button>
+                <Button asChild >
+                    <Link to={`${import.meta.env.VITE_APP_URL}`}>Accéder à l'app<ArrowRight/></Link>
                 </Button>
             </CardFooter>
             <Social/>

@@ -1,4 +1,4 @@
-import { Loader2, CheckCircle, XCircle } from "lucide-react"
+import { Loader2, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useEmailConfirmation } from "@/hooks/useEmailConfirmation"
 
@@ -7,7 +7,7 @@ interface ConfirmEmailCardProps {
 }
 
 export default function ConfirmEmailForm({ token }: ConfirmEmailCardProps) {
-    const { loading, error, success, goToLogin } = useEmailConfirmation(token)
+    const { loading, error, success, confirmEmail, goToLogin } = useEmailConfirmation(token)
 
     return (
         <div className="flex flex-col gap-6 w-full">
@@ -17,47 +17,42 @@ export default function ConfirmEmailForm({ token }: ConfirmEmailCardProps) {
                     <div className="text-center">
                         <h1 className="text-2xl font-semibold">Confirmation de l'email</h1>
                         <p className="text-sm text-muted-foreground mt-1">
-                            Vérification de votre adresse email
+                            Cliquez sur le bouton ci-dessous pour confirmer votre adresse email
                         </p>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center py-8">
-                    {loading && (
-                        <div className="flex flex-col items-center gap-4">
-                            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                            <div className="text-center">
-                                <p className="font-medium">Confirmation en cours...</p>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                    Veuillez patienter
-                                </p>
-                            </div>
-                        </div>
+                <div className="flex flex-col gap-4">
+                    {!success && (
+                        <Button
+                            onClick={confirmEmail}
+                            disabled={loading || !!error}
+                            className="w-full"
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Confirmation en cours...
+                                </>
+                            ) : (
+                                "Confirmer mon email"
+                            )}
+                        </Button>
                     )}
 
-                    {!loading && success && (
-                        <div className="flex flex-col items-center gap-4 text-center">
-                            <CheckCircle className="h-12 w-12 text-green-500" />
+                    {success && (
+                        <div className="flex flex-col gap-4 text-center">
+                            <div className="flex justify-center">
+                                <CheckCircle className="h-12 w-12 text-green-500" />
+                            </div>
                             <div>
                                 <p className="font-medium text-green-600">Email confirmé avec succès</p>
                                 <p className="text-sm text-muted-foreground mt-1">
-                                    Redirection vers la page de connexion...
-                                </p>
-                            </div>
-                        </div>
-                    )}
-
-                    {!loading && error && (
-                        <div className="flex flex-col items-center gap-4 text-center">
-                            <XCircle className="h-12 w-12 text-red-500" />
-                            <div>
-                                <p className="font-medium text-red-600">Vérification impossible</p>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                    Le lien de confirmation est invalide ou expiré
+                                    Vous pouvez maintenant vous connecter
                                 </p>
                             </div>
                             <Button onClick={goToLogin} className="w-full">
-                                Retour à la connexion
+                                Aller au login
                             </Button>
                         </div>
                     )}

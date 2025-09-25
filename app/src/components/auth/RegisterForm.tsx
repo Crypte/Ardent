@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext.tsx"
 import { PASSWORD_REQUIREMENTS } from "@/constants/auth"
 import FieldBlock from "@/components/FieldBlock"
+import { useState } from "react"
 
 interface RegisterFormData {
     name: string
@@ -43,6 +44,8 @@ const schema = yup
 export function RegisterForm() {
     const navigate = useNavigate()
     const { register } = useAuth()
+    const [showVerificationMessage, setShowVerificationMessage] = useState(false)
+    const [userEmail, setUserEmail] = useState('')
 
     const methods = useForm<RegisterFormData>({
         resolver: yupResolver(schema),
@@ -69,11 +72,36 @@ export function RegisterForm() {
             })
 
             if (result.success) {
-                navigate('/login')
+                setUserEmail(data.email)
+                setShowVerificationMessage(true)
             }
         } catch {
             // Les erreurs sont gérées par le contexte AuthContext
         }
+    }
+
+    if (showVerificationMessage) {
+        return (
+            <div className="flex flex-col gap-6 w-full">
+                <div className="flex flex-col items-center gap-4">
+                    <img src={'/ArdentLogo.png'} alt={'ArdentLogo'} className={'h-12'}/>
+
+                    <div className="text-center space-y-4">
+                        <h2 className="text-lg font-semibold">Vérifiez votre email</h2>
+                        <p className="text-muted-foreground">
+                            Nous venons d'envoyer un mail de vérification à <strong>{userEmail}</strong>.
+                        </p>
+
+                        <Button
+                            className="w-full"
+                            onClick={() => navigate('/login')}
+                        >
+                            Aller au login
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -84,7 +112,7 @@ export function RegisterForm() {
                         <img src={'/ArdentLogo.png'} alt={'ArdentLogo'} className={'h-12'}/>
                         <div className="text-center text-sm text-muted-foreground">
                             Déjà un compte ?{" "}
-                            <Link to="/login" className="underline underline-offset-4 text-tertiary-foreground">
+                            <Link to="/login" className="underline underline-offset-4 text-tertiary-foreground w-fit">
                                 Se connecter
                             </Link>
                         </div>

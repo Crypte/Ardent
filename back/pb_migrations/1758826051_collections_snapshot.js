@@ -1042,7 +1042,7 @@ migrate((app) => {
         {
           "exceptDomains": null,
           "hidden": false,
-          "id": "_clone_vAOL",
+          "id": "_clone_HfJv",
           "name": "email",
           "onlyDomains": null,
           "presentable": false,
@@ -1053,7 +1053,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_KFFh",
+          "id": "_clone_K7Zm",
           "max": 255,
           "min": 0,
           "name": "name",
@@ -1066,7 +1066,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_UbWC",
+          "id": "_clone_2unZ",
           "name": "verified",
           "presentable": false,
           "required": false,
@@ -1075,7 +1075,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_CWm1",
+          "id": "_clone_WFJ8",
           "maxSelect": 1,
           "maxSize": 0,
           "mimeTypes": [
@@ -1145,7 +1145,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_0oRP",
+          "id": "_clone_I9zN",
           "max": 0,
           "min": 0,
           "name": "title",
@@ -1158,7 +1158,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_Wkeb",
+          "id": "_clone_E6iz",
           "name": "published",
           "presentable": false,
           "required": false,
@@ -1168,7 +1168,7 @@ migrate((app) => {
         {
           "convertURLs": false,
           "hidden": false,
-          "id": "_clone_M5va",
+          "id": "_clone_DqtV",
           "maxSize": 0,
           "name": "content",
           "presentable": false,
@@ -1178,7 +1178,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_IobZ",
+          "id": "_clone_D9TU",
           "maxSize": 0,
           "name": "source",
           "presentable": false,
@@ -1188,7 +1188,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_gzNA",
+          "id": "_clone_1IQe",
           "name": "created",
           "onCreate": true,
           "onUpdate": false,
@@ -1198,7 +1198,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_W5eM",
+          "id": "_clone_tM9K",
           "name": "updated",
           "onCreate": true,
           "onUpdate": true,
@@ -1209,7 +1209,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_cSet",
+          "id": "_clone_wpQX",
           "max": 0,
           "min": 0,
           "name": "theme_name",
@@ -1371,7 +1371,7 @@ migrate((app) => {
           "minSelect": 0,
           "name": "ressource_id",
           "presentable": false,
-          "required": false,
+          "required": true,
           "system": false,
           "type": "relation"
         },
@@ -1381,7 +1381,7 @@ migrate((app) => {
           "maxSelect": 1,
           "name": "type",
           "presentable": false,
-          "required": false,
+          "required": true,
           "system": false,
           "type": "select",
           "values": [
@@ -1401,7 +1401,7 @@ migrate((app) => {
           "pattern": "",
           "presentable": false,
           "primaryKey": false,
-          "required": false,
+          "required": true,
           "system": false,
           "type": "text"
         },
@@ -1415,7 +1415,7 @@ migrate((app) => {
           "pattern": "",
           "presentable": false,
           "primaryKey": false,
-          "required": false,
+          "required": true,
           "system": false,
           "type": "text"
         },
@@ -1454,6 +1454,105 @@ migrate((app) => {
       "indexes": [],
       "listRule": null,
       "name": "ressource_card",
+      "system": false,
+      "type": "base",
+      "updateRule": null,
+      "viewRule": null
+    },
+    {
+      "createRule": "@request.auth.id != \"\"",
+      "deleteRule": null,
+      "fields": [
+        {
+          "autogeneratePattern": "[a-z0-9]{15}",
+          "hidden": false,
+          "id": "text3208210256",
+          "max": 15,
+          "min": 15,
+          "name": "id",
+          "pattern": "^[a-z0-9]+$",
+          "presentable": false,
+          "primaryKey": true,
+          "required": true,
+          "system": true,
+          "type": "text"
+        },
+        {
+          "cascadeDelete": true,
+          "collectionId": "_pb_users_auth_",
+          "hidden": false,
+          "id": "relation2809058197",
+          "maxSelect": 1,
+          "minSelect": 0,
+          "name": "user_id",
+          "presentable": false,
+          "required": true,
+          "system": false,
+          "type": "relation"
+        },
+        {
+          "autogeneratePattern": "",
+          "hidden": false,
+          "id": "text724990059",
+          "max": 0,
+          "min": 0,
+          "name": "title",
+          "pattern": "",
+          "presentable": false,
+          "primaryKey": false,
+          "required": true,
+          "system": false,
+          "type": "text"
+        },
+        {
+          "autogeneratePattern": "",
+          "hidden": false,
+          "id": "text1843675174",
+          "max": 0,
+          "min": 0,
+          "name": "description",
+          "pattern": "",
+          "presentable": false,
+          "primaryKey": false,
+          "required": true,
+          "system": false,
+          "type": "text"
+        },
+        {
+          "hidden": false,
+          "id": "json1542800728",
+          "maxSize": 0,
+          "name": "source",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "json"
+        },
+        {
+          "hidden": false,
+          "id": "autodate2990389176",
+          "name": "created",
+          "onCreate": true,
+          "onUpdate": false,
+          "presentable": false,
+          "system": false,
+          "type": "autodate"
+        },
+        {
+          "hidden": false,
+          "id": "autodate3332085495",
+          "name": "updated",
+          "onCreate": true,
+          "onUpdate": true,
+          "presentable": false,
+          "system": false,
+          "type": "autodate"
+        }
+      ],
+      "id": "pbc_4289449067",
+      "indexes": [],
+      "listRule": null,
+      "name": "proposal",
       "system": false,
       "type": "base",
       "updateRule": null,
