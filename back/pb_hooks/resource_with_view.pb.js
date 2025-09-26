@@ -40,6 +40,7 @@ routerAdd("GET", "/api/ressource-with-view/{id}", (c) => {
             if (cardsJson && cardsJson !== '[]') {
                 cards = JSON.parse(cardsJson)
             }
+            console.log("No view record found for user", cards)
         } catch (err) {
             console.log("Error parsing cards JSON:", err)
             cards = []

@@ -46,7 +46,6 @@ export interface RessourceCard {
         word?: string
         definition?: string
         genre?: 'masculin' | 'féminin'
-        usage?: string[]
     } | null
 }
 

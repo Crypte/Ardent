@@ -34,8 +34,8 @@ export default function RessourceHeader({ title, theme, created, isViewed}: Reso
                 </div>
             </div>
             <h1 className="lg:text-4xl text-3xl italic font-bold">{title}</h1>
-            <div className={'text-sm flex items-center gap-2'}>Publié le {formattedDate} par
-                <Badge className="rounded-full gap-1 pl-0.5 pr-1.5">
+            <div className={'text-sm flex items-center gap-2'}>Le {formattedDate} par
+                <Badge  variant={'secondary'} className="rounded-full gap-1 pl-0.5 pr-1.5">
                         <img
                             className="size-4 rounded-full"
                             src="/ArdentLogo.svg"
