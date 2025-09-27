@@ -1,5 +1,6 @@
-import { useViewsNavigation } from "@/hooks/useViewsNavigation";
+
 import { useUserStats } from "@/hooks/useUserStats";
+import { useResetProgress } from "@/hooks/useResetProgress";
 import {Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +17,12 @@ import { useState } from "react";
 import {Separator} from "@/components/ui/separator.tsx";
 
 export function ProgressionCard() {
-    const { userView, loading: userLoading, refetch } = useUserStats();
-    const { resetProgress } = useViewsNavigation();
+    const { user, loading: userLoading, refetch } = useUserStats();
+    const { resetProgress } = useResetProgress();
     const [isResetting, setIsResetting] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
-    const viewedCount = userView?.viewed_resources_count || 0;
+    const viewedCount = user?.viewed_resources_count || 0;
 
     const handleResetProgress = async () => {
         setIsResetting(true);

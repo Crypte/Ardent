@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { pb } from "@/pocketbase/pocketbase"
-import type { UserView } from "@/types/UserView"
+import type { User } from "@/types"
 
 // Types pour les erreurs
 interface UserViewError {
@@ -10,7 +10,7 @@ interface UserViewError {
 
 export function useUserStats() {
     // États
-    const [userView, setUserView] = useState<UserView | null>(null)
+    const [user, setUser] = useState<User| null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<UserViewError | null>(null)
     
@@ -21,7 +21,7 @@ export function useUserStats() {
     // Fonction utilitaire pour récupérer les données utilisateur
     const fetchUserView = useCallback(async (forceRefresh = false) => {
         if (!pb.authStore.isValid) {
-            setUserView(null)
+            setUser(null)
             setLoading(false)
             return
         }
@@ -42,14 +42,14 @@ export function useUserStats() {
         setError(null)
 
         try {
-            const userViewData = await pb.collection("user_view").getOne<UserView>(pb.authStore.model.id)
-            setUserView(userViewData)
+            const userViewData = await pb.collection("user_view").getOne<User>(pb.authStore.model.id)
+            setUser(userViewData)
             lastFetchTime.current = now
         } catch (err: any) {
             console.error("Erreur lors de la récupération des données utilisateur:", err)
             const errorMessage = err?.response?.message || "Impossible de récupérer les données utilisateur"
             setError({ message: errorMessage, code: err?.status || "FETCH_ERROR" })
-            setUserView(null)
+            setUser(null)
         } finally {
             setLoading(false)
         }
@@ -76,17 +76,11 @@ export function useUserStats() {
 
     return {
         // Données
-        userView,
+        user,
         loading,
         error,
         
         // Actions
         refetch,
-        
-        // Helpers computed
-        isVerified: userView?.verified === true,
-        hasData: userView !== null,
-        accessibleResourcesCount: userView?.accessible_resources_count || 0,
-        viewedResourcesCount: userView?.viewed_resources_count || 0
     }
 }

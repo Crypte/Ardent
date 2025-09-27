@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { pb } from "@/pocketbase/pocketbase"
-import type { Ressource } from "@/types/Ressource"
+import type { Article } from "@/types"
 
-export function useRessourceById(id: string | null) {
-    const [ressource, setRessource] = useState<Ressource | null>(null)
+export function useArticleById(id: string | null) {
+    const [article, setArticle] = useState<Article | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        const fetchRessourceWithView = async () => {
+        const fetchArticleWithView = async () => {
             if (!id) {
                 setError("ID invalide")
                 setLoading(false)
@@ -19,25 +19,25 @@ export function useRessourceById(id: string | null) {
             setError(null)
 
             try {
-                // Appeler notre route personnalisée
-                const response = await pb.send(`/api/ressource-with-view/${id}`, {
+                // Utiliser la nouvelle API get-article
+                const response = await pb.send(`/api/get-article/${id}`, {
                     method: 'GET'
                 })
-                
-                setRessource(response as Ressource)
+
+                setArticle(response as Article)
             } catch (err) {
-                console.error("Erreur récupération ressource avec vue:", err)
-                setError("Impossible de récupérer la ressource.")
+                console.error("Erreur récupération article avec vue:", err)
+                setError("Impossible de récupérer la article.")
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchRessourceWithView()
+        fetchArticleWithView()
     }, [id])
 
     return {
-        ressource,
+        article,
         loading,
         error,
     }

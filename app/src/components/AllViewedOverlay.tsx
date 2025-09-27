@@ -31,7 +31,10 @@ export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: Al
                     </div>
                 </CredenzaHeader>
                 <CredenzaFooter>
-                    <Button onClick={onReviewOld} className="w-full">
+                    <Button onClick={() => {
+                        onReviewOld()
+                        onClose?.()
+                    }} className="w-full">
                         J'ai compris
                     </Button>
                 </CredenzaFooter>

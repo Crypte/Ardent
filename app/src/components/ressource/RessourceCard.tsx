@@ -1,9 +1,9 @@
-import type { RessourceCard as RessourceCardType } from "@/types/Ressource";
+import type { ArticleCard } from "@/types";
 import { Calendar, Zap, ChartColumn, BookA } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface RessourceCardProps {
-    card: RessourceCardType
+    card: ArticleCard
 }
 
 const cardConfig = {
