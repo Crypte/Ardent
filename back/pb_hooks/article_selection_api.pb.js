@@ -1,14 +1,59 @@
 /// <reference path="../pb_data/types.d.ts" />
 
 // API 1: Sélection d'article avec priorité aux non vus
-routerAdd("GET", "/api/select-article", (c) => {
+routerAdd("GET", "/api/select-article/{id...}", (c) => {
     const authRecord = c.auth
+    const currentId = c.request.pathValue("id")
+    console.log(currentId)
 
     if (!authRecord) {
         return c.json(401, {
             "error": "Authentification requise",
             "code": "AUTH_REQUIRED"
         })
+    }
+
+    // Si un current_id est fourni, marquer l'article comme vu
+    if (currentId) {
+        try {
+            // Vérifier si l'article existe et est accessible à l'utilisateur
+            const currentArticle = $app.findRecordById("ressource", currentId)
+            const isUserPremium = authRecord.get("is_premium")
+
+            // Vérifier l'accès à l'article
+            const hasAccess = currentArticle.get("published") &&
+                             (isUserPremium || currentArticle.get("is_public"))
+
+            if (hasAccess) {
+                // Vérifier si la vue existe déjà
+                let existingView = null
+                try {
+                    existingView = $app.findFirstRecordByFilter(
+                        "user_views",
+                        `user = "${authRecord.id}" && ressource = "${currentId}"`
+                    )
+                } catch (viewErr) {
+                    // Aucune vue trouvée, c'est normal
+                    existingView = null
+                }
+
+                if (!existingView) {
+                    const userViewsCollection = $app.findCollectionByNameOrId("user_views")
+                    const record = new Record(userViewsCollection, {
+                        user: authRecord.id,
+                        ressource: currentId,
+                        viewed_at: new Date().toISOString()
+                    })
+                    $app.save(record)
+                    console.log("Vue créée pour l'article", currentId)
+                } else {
+                    console.log("Article", currentId, "déjà vu par l'utilisateur")
+                }
+            }
+        } catch (e) {
+            // Continuer même si le marquage échoue
+            console.log("Erreur lors du marquage de l'article comme vu:", e.message)
+        }
     }
 
     try {
@@ -85,6 +130,22 @@ routerAdd("GET", "/api/select-article", (c) => {
             candidateArticles = allAccessibleArticles
         }
 
+        // Exclure l'article actuel si fourni
+        if (currentId) {
+            candidateArticles = candidateArticles.filter(article => article.id !== currentId)
+        }
+
+        // Vérifier qu'il reste des candidats après exclusion
+        if (candidateArticles.length === 0) {
+            return c.json(200, {
+                "articleId": null,
+                "hasUnseenArticles": false,
+                "totalAccessible": totalAccessible,
+                "userType": isUserPremium ? "premium" : "free",
+                "message": "Aucun autre article disponible"
+            })
+        }
+
         // Sélectionner un article aléatoirement parmi les candidats
         const randomIndex = Math.floor(Math.random() * candidateArticles.length)
         const selectedArticle = candidateArticles[randomIndex]
@@ -108,6 +169,10 @@ routerAdd("GET", "/api/select-article", (c) => {
         })
     }
 }, $apis.requireAuth())
+
+
+
+
 
 
 // API 2: Récupération sécurisée d'article par ID
@@ -208,22 +273,6 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
             user_type: isUserPremium ? "premium" : "free"
         }
 
-        // Enregistrer la vue APRÈS avoir construit la réponse
-        if (!isViewed) {
-            try {
-                const collection = $app.findCollectionByNameOrId("user_views")
-                const record = new Record(collection, {
-                    user: authRecord.id,
-                    ressource: articleId,
-                    viewed_at: new Date().toISOString()
-                })
-                $app.save(record)
-                console.log("Vue créée pour utilisateur", authRecord.id, "article", articleId)
-
-            } catch (err) {
-                console.error("Erreur lors de la création de la vue:", err)
-            }
-        }
 
         return c.json(200, response)
 

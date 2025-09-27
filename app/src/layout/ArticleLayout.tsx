@@ -14,6 +14,7 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
     const navigate = useNavigate()
     const { selectArticle, data, reset } = useArticleSelection()
     const [overlayVisible, setOverlayVisible] = useState(false)
+    const [previousArticleId, setPreviousArticleId] = useState<string | null>(null)
 
     // Redirection vers un ID aléatoire si pas d'ID dans l'URL
     useEffect(() => {
@@ -34,6 +35,13 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
         }
     }, [id, data, selectArticle])
 
+    // Mettre à jour l'article précédent quand l'ID change
+    useEffect(() => {
+        if (id && id !== previousArticleId) {
+            setPreviousArticleId(id)
+        }
+    }, [id, previousArticleId])
+
     // Gestion de l'overlay
     useEffect(() => {
         if (data?.isAllViewed) {
@@ -47,7 +55,7 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
 
     // Actions pour RandomButton
     const handleNavigateToRandomResource = async () => {
-        const result = await selectArticle()
+        const result = await selectArticle(previousArticleId)
 
         if (result?.articleId) {
             navigate(`/${result.articleId}`)

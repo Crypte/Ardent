@@ -7,12 +7,13 @@ export function useArticleSelection() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<ApiError | null>(null)
 
-    const selectArticle = useCallback(async () => {
+    const selectArticle = useCallback(async (previousId?: string | null) => {
         setLoading(true)
         setError(null)
 
         try {
-            const articleData: ArticleSelectionResponse = await pb.send("/api/select-article")
+            const endpoint = previousId ? `/api/select-article/${previousId}` : "/api/select-article/"
+            const articleData: ArticleSelectionResponse = await pb.send(endpoint, { method: "GET"})
 
             setData(articleData)
             return articleData

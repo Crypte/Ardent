@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Shuffle, Eye } from "lucide-react"
+import {CheckIcon, RotateCcw, Shuffle} from "lucide-react"
 
 interface RandomButtonProps {
     onNavigateToRandom: () => void
@@ -18,10 +17,17 @@ export default function RandomButton({
             <div className="flex gap-2 items-center">
                 {/* Indicateur de statut */}
                 <div className="flex items-center px-3">
-                    <Badge variant={isAllViewed ? "default" : "secondary"} className="flex items-center gap-1">
-                        <Eye size={12} />
-                        {isAllViewed ? "Vous êtes à jour" : "Il vous en reste"}
-                    </Badge>
+                    <div className={`flex text-sm items-center gap-1 ${isAllViewed ? "text-green-800" : "text-orange-400"}`}>
+                        {isAllViewed ?
+                            <>
+                            Vous êtes à jour<CheckIcon className={'size-3'}/>
+                            </>
+                            :
+                            <>
+                            Il vous en reste<RotateCcw className={'size-3'}/>
+                            </>
+                        }
+                    </div>
                 </div>
 
                 {/* Bouton suivante */}
