@@ -69,16 +69,3 @@ export interface ApiError {
     code?: string
     details?: string
 }
-
-// ================== TYPES LEGACY (À SUPPRIMER PROGRESSIVEMENT) ==================
-// Gardés temporairement pour compatibilité
-export type Ressource = Article
-export type RessourceCard = ArticleCard
-
-// Types PocketBase
-export interface ViewRecord {
-    id: string
-    ressource: string
-    user: string
-    viewed_at: string
-}

@@ -18,11 +18,12 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {Badge} from "@/components/ui/badge.tsx";
 
 export default function Navbar() {
     const {user, logout } = useAuth()
+    console.log(user)
     const location = useLocation()
-    // Si on est déjà sur une route /random, le logo ne fait rien, sinon redirige vers /
     const isOnRandomRoute = location.pathname.startsWith('/random')
 
     return (
@@ -56,7 +57,9 @@ export default function Navbar() {
                             <DropdownMenuTrigger asChild>
                                 <Button>
                                     Mon compte
-                                    <CircleUser className="h-4 w-4" />
+                                    <Badge variant={'secondary'} className={'text-xs'}>
+                                        {user?.is_premium ? "Premium" : "Classic"}
+                                    </Badge>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56">

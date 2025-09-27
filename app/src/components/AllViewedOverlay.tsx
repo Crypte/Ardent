@@ -7,7 +7,10 @@ import {
     CredenzaHeader,
     CredenzaTitle
 } from "@/components/ui/credenza"
-import { Clock } from "lucide-react"
+import {ArrowUp, Clock} from "lucide-react"
+import {useAuth} from "@/contexts/AuthContext.tsx";
+import { useEffect, useState } from "react";
+import {Badge} from "@/components/ui/badge.tsx";
 
 interface AllViewedOverlayProps {
     isVisible: boolean
@@ -16,21 +19,67 @@ interface AllViewedOverlayProps {
 }
 
 export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: AllViewedOverlayProps) {
+    const { user } = useAuth()
+    const [timeUntilMidnight, setTimeUntilMidnight] = useState('')
+
+    useEffect(() => {
+        if (!user?.is_premium && isVisible) {
+            const updateCountdown = () => {
+                const now = new Date()
+                const midnight = new Date()
+                midnight.setHours(24, 0, 0, 0)
+
+                const diff = midnight.getTime() - now.getTime()
+                const hours = Math.floor(diff / (1000 * 60 * 60))
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+
+                setTimeUntilMidnight(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
+            }
+
+            updateCountdown()
+            const interval = setInterval(updateCountdown, 1000)
+            return () => clearInterval(interval)
+        }
+    }, [user?.is_premium, isVisible])
+
+    const isPremium = user?.is_premium
+
     return (
         <Credenza open={isVisible} onOpenChange={(open) => !open && onClose?.()}>
-            <CredenzaContent>
+            <CredenzaContent className={'gap-6'}>
                 <CredenzaHeader className="text-center">
                     <div className="flex flex-col items-center">
-                        <Clock className="size-12 mx-auto mb-4 text-muted-foreground" />
-                        <CredenzaTitle className="text-xl font-semibold mb-2">
-                            Vous avez tout vu
+                            <Clock className="size-12 mx-auto mb-4 text-muted-foreground" />
+                        <CredenzaTitle className="text-xl font-semibold mb-4">
+                            {isPremium ? "Toutes les ressources vues !" : "C'est tout pour aujourd'hui"}
                         </CredenzaTitle>
-                        <CredenzaDescription className="text-sm text-muted-foreground mb-4">
-                            Attendez les prochaines ressources ou revoyez les anciennes.
+                        <CredenzaDescription className="text-sm text-muted-foreground text-center">
+                            {isPremium ? (
+                                <div className="text-left">
+                                    <p className="mb-3">Vous avez vu toutes les ressources de la plateforme. Vous pouvez :</p>
+                                    <ul className="text-left space-y-1 list-disc list-inside">
+                                        <li>Rester au mode aléatoire pour revoir les ressources aléatoirement</li>
+                                        <li>Réinitialiser votre progression pour les revoir</li>
+                                        <li>Attendre les prochaines qui devraient bientôt arriver</li>
+                                    </ul>
+                                </div>
+                            ) : (
+                                <>
+                                    <p className={'mb-4'}>Vous avez vu les 10 ressources gratuites de ce jour, attendez la prochaine rotation ou reconsultez les.</p>
+                                    <Badge variant={'tertiary'} className={'text-lg'}>{timeUntilMidnight}</Badge>
+                                </>
+                            )}
                         </CredenzaDescription>
                     </div>
                 </CredenzaHeader>
-                <CredenzaFooter>
+                <CredenzaFooter className="flex sm:flex-col gap-2">
+                    {!isPremium && (
+                        <Button disabled variant="outline" className="w-full">
+                            Passez à Ardent illimité
+                            <ArrowUp className="mr-2 h-4 w-4" />
+                        </Button>
+                    )}
                     <Button onClick={() => {
                         onReviewOld()
                         onClose?.()

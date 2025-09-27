@@ -121,7 +121,6 @@ routerAdd("GET", "/api/select-article", (c) => {
 // API 2: Récupération sécurisée d'article par ID
 routerAdd("GET", "/api/get-article/{id...}", (c) => {
     const articleId = c.request.pathValue("id")
-    console.log(articleId)
     const authRecord = c.auth
 
     if (!articleId) {

@@ -12,7 +12,7 @@ export interface UserModel {
     email: string
     name: string
     verified: boolean
-    [key: string]: any
+    is_premium: boolean
 }
 
 interface LoginCredentials {
