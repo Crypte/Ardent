@@ -29,7 +29,7 @@ export interface Article {
     unique_viewers: number
     cards: ArticleCard[]
     // Données de vue utilisateur
-    is_viewed?: boolean
+    is_viewed: boolean
     viewed_at?: string | null
     access_type?: "premium" | "public"
     user_type?: "premium" | "free"
@@ -57,7 +57,6 @@ export interface ArticleSelectionResponse {
     totalAccessible: number
     isAllViewed: boolean
     totalUnseenInDatabase: number
-    mode: "exclude_viewed" | "random"
     userType: "premium" | "free"
     articleTitle?: string
     isPublic?: boolean

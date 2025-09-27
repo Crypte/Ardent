@@ -27,9 +27,6 @@ export default function Home() {
     // Si pas de ressource ou erreur
     if (error || !article) return <EmptyResourceCard />
 
-    // isViewed vient directement de la ressource
-    const isViewed = article?.is_viewed ?? false
-
     return (
         <AnimatePresence mode="wait">
         <motion.div
@@ -49,7 +46,7 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1, duration: 0.4 }}
             >
-                <RessourceHeader title={article.title} theme={article.theme_name} created={article.created} isViewed={isViewed || false}/>
+                <RessourceHeader title={article.title} theme={article.theme_name} created={article.created} isViewed={article.is_viewed}/>
                 <RessourceContent content={article.content} />
                 {article.source &&(
                     <RessourceSource source={article.source}/>

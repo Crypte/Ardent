@@ -57,16 +57,16 @@ export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: Al
                         <CredenzaDescription className="text-sm text-muted-foreground text-center">
                             {isPremium ? (
                                 <div className="text-left">
-                                    <p className="mb-3">Vous avez vu toutes les ressources de la plateforme. Vous pouvez :</p>
+                                    <p className="mb-3">Vous avez vu tous les articles de la plateforme. Vous pouvez :</p>
                                     <ul className="text-left space-y-1 list-disc list-inside">
                                         <li>Rester au mode aléatoire pour revoir les ressources aléatoirement</li>
                                         <li>Réinitialiser votre progression pour les revoir</li>
-                                        <li>Attendre les prochaines qui devraient bientôt arriver</li>
+                                        <li>Attendre les prochaines qui vont arriver</li>
                                     </ul>
                                 </div>
                             ) : (
                                 <>
-                                    <p className={'mb-4'}>Vous avez vu les 10 ressources gratuites de ce jour, attendez la prochaine rotation ou reconsultez les.</p>
+                                    <p className={'mb-4'}>Vous avez vu les 10 ressources gratuites de ce jour, attendez la prochaine rotation ou reconsultez les de façon aléatoire.</p>
                                     <Badge variant={'tertiary'} className={'text-lg'}>{timeUntilMidnight}</Badge>
                                 </>
                             )}

@@ -1,9 +1,8 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-// API 1: Sélection d'article selon le mode de défilement
+// API 1: Sélection d'article avec priorité aux non vus
 routerAdd("GET", "/api/select-article", (c) => {
     const authRecord = c.auth
-    const mode = c.request.url.query().get("mode") || "exclude_viewed"
 
     if (!authRecord) {
         return c.json(401, {
@@ -47,7 +46,6 @@ routerAdd("GET", "/api/select-article", (c) => {
                 "articleId": null,
                 "hasUnseenArticles": false,
                 "totalAccessible": 0,
-                "mode": mode,
                 "userType": isUserPremium ? "premium" : "free",
                 "message": "Aucun article accessible"
             })
@@ -79,18 +77,13 @@ routerAdd("GET", "/api/select-article", (c) => {
         // Calculer le nombre d'articles non vus dans toute la base
         const totalUnseenInDatabase = totalArticles - viewedArticleIds.length
 
-        let candidateArticles = allAccessibleArticles
+        // Toujours prioriser les articles non vus
+        let candidateArticles = unseenArticles
 
-        if (mode === "exclude_viewed") {
-            // Mode exclure les vus : utiliser seulement les articles non vus
-            candidateArticles = unseenArticles
-
-            // Si pas d'articles non vus, fallback sur un article vu random
-            if (candidateArticles.length === 0) {
-                candidateArticles = allAccessibleArticles
-            }
+        // Si pas d'articles non vus, utiliser tous les articles accessibles
+        if (candidateArticles.length === 0) {
+            candidateArticles = allAccessibleArticles
         }
-        // En mode "random", candidateArticles reste = allAccessibleArticles
 
         // Sélectionner un article aléatoirement parmi les candidats
         const randomIndex = Math.floor(Math.random() * candidateArticles.length)
@@ -102,7 +95,6 @@ routerAdd("GET", "/api/select-article", (c) => {
             "totalAccessible": totalAccessible,
             "isAllViewed": isAllViewed,
             "totalUnseenInDatabase": totalUnseenInDatabase,
-            "mode": mode,
             "userType": isUserPremium ? "premium" : "free",
             "articleTitle": selectedArticle.get("title"), // Pour debug/logs
             "isPublic": selectedArticle.get("is_public")

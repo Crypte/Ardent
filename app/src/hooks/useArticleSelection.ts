@@ -7,14 +7,12 @@ export function useArticleSelection() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<ApiError | null>(null)
 
-    const selectArticle = useCallback(async (mode: "exclude_viewed" | "random" = "exclude_viewed") => {
+    const selectArticle = useCallback(async () => {
         setLoading(true)
         setError(null)
 
         try {
-            const articleData: ArticleSelectionResponse = await pb.send("/api/select-article", {
-                query: { mode }
-            })
+            const articleData: ArticleSelectionResponse = await pb.send("/api/select-article")
 
             setData(articleData)
             return articleData

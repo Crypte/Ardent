@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 
 interface ResourceHeaderProps {
-    theme?:string
+    theme:string
     title: string
     created:string
     isViewed:boolean

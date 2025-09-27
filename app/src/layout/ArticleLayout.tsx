@@ -13,46 +13,42 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
     const { id } = useParams<{ id?: string }>()
     const navigate = useNavigate()
     const { selectArticle, data, reset } = useArticleSelection()
-    const [excludeViewed, setExcludeViewed] = useState(() => {
-        const saved = localStorage.getItem('excludeViewed')
-        return saved !== null ? JSON.parse(saved) : true
-    })
-
-    // Sauvegarder le mode dans localStorage
-    useEffect(() => {
-        localStorage.setItem('excludeViewed', JSON.stringify(excludeViewed))
-    }, [excludeViewed])
+    const [overlayVisible, setOverlayVisible] = useState(false)
 
     // Redirection vers un ID aléatoire si pas d'ID dans l'URL
     useEffect(() => {
         if (!id) {
             reset()
-            const mode = excludeViewed ? "exclude_viewed" : "random"
-            selectArticle(mode).then(result => {
+            selectArticle().then(result => {
                 if (result?.articleId) {
                     navigate(`/${result.articleId}`, { replace: true })
                 }
             })
         }
-    }, [id, selectArticle, excludeViewed, reset, navigate])
+    }, [id, selectArticle, reset, navigate])
+
+    // Récupérer les infos de statut même avec un ID
+    useEffect(() => {
+        if (id && !data) {
+            selectArticle()
+        }
+    }, [id, data, selectArticle])
+
+    // Gestion de l'overlay
+    useEffect(() => {
+        if (data?.isAllViewed) {
+            setOverlayVisible(true)
+        }
+    }, [data?.isAllViewed])
+
+    const handleCloseOverlay = () => {
+        setOverlayVisible(false)
+    }
 
     // Actions pour RandomButton
     const handleNavigateToRandomResource = async () => {
-        const mode = excludeViewed ? "exclude_viewed" : "random"
-        const result = await selectArticle(mode)
+        const result = await selectArticle()
 
-        if (result?.articleId) {
-            navigate(`/${result.articleId}`)
-        }
-    }
-
-    const handleExcludeViewedChange = (pressed: boolean) => {
-        setExcludeViewed(pressed)
-    }
-
-    const handleResetToAllResources = async () => {
-        setExcludeViewed(false) // Switch vers mode random
-        const result = await selectArticle("random")
         if (result?.articleId) {
             navigate(`/${result.articleId}`)
         }
@@ -61,16 +57,15 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
     return (
         <>
             <AllViewedOverlay
-                isVisible={(data?.isAllViewed || false) && excludeViewed}
-                onReviewOld={handleResetToAllResources}
-                onClose={handleResetToAllResources}
+                isVisible={overlayVisible}
+                onReviewOld={handleCloseOverlay}
+                onClose={handleCloseOverlay}
             />
             <ReadingProgress />
             {children}
             <RandomButton
-                excludeViewed={excludeViewed}
-                onExcludeViewedChange={handleExcludeViewedChange}
                 onNavigateToRandom={handleNavigateToRandomResource}
+                isAllViewed={data?.isAllViewed}
             />
         </>
     )
