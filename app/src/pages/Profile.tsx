@@ -3,6 +3,7 @@ import {PasswordResetCard} from "@/components/profile/PasswordResetCard.tsx";
 import {DeleteAccountCard} from "@/components/profile/DeleteAccountCard.tsx";
 import {PersonalInfoCard} from "@/components/profile/PersonalInfoCard.tsx";
 import {ProgressionCard} from "@/components/profile/ProgressionCard.tsx";
+import {PlanCard} from "@/components/profile/PlanCard.tsx";
 
 export default function Profile() {
     const { user, logout } = useAuth()
@@ -25,6 +26,7 @@ export default function Profile() {
                     email={user.email}
                     verified={user.verified}
                 />
+                <PlanCard/>
                 <ProgressionCard />
                 <PasswordResetCard email={user.email}/>
                 <DeleteAccountCard id={user.id} onAccountDeleted={logout}/>
