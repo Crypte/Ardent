@@ -30,6 +30,12 @@ export default function Navbar() {
                         onClick={(e) => isOnRandomRoute && e.preventDefault()}
                     >
                         <img src={'/ArdentLogo.png'} alt={'ArdentLogo'} className={'h-9'}/>
+                        <Badge
+                            variant={'secondary'}
+                            className={`text-xs ${user?.is_premium ? 'text-tertiary-foreground bg-tertiary' : ''}`}
+                        >
+                            {user?.is_premium ? "Illimité" : "Classic"}
+                        </Badge>
                     </Link>
                 </div>
                 
@@ -39,12 +45,6 @@ export default function Navbar() {
                             <DropdownMenuTrigger asChild>
                                 <Button>
                                     Mon compte
-                                    <Badge
-                                        variant={'secondary'}
-                                        className={`text-xs ${user?.is_premium ? 'text-tertiary-foreground bg-tertiary' : ''}`}
-                                    >
-                                        {user?.is_premium ? "Illimité" : "Classic"}
-                                    </Badge>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56">
