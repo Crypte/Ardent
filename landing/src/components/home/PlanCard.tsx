@@ -10,11 +10,12 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card.tsx";
+import {Link} from "react-router-dom";
 
 export default function PlanCard() {
 
     const FreeFeature = [
-        "10 articles aléatoire par jours",
+        "10 articles aléatoires par jours",
         "Tous les thèmes",
         "Suivi de progression",
     ];
@@ -49,8 +50,10 @@ export default function PlanCard() {
                     ))}
                 </CardContent>
                 <CardFooter>
-                    <Button variant={'secondary'} className={'w-full'}>
-                        Accédez au articles du jour
+                    <Button asChild variant={'secondary'} className={'w-full'}>
+                        <Link to={`${import.meta.env.VITE_APP_URL}`}>
+                        Accédez aux articles du jour
+                        </Link>
                     </Button>
                 </CardFooter>
             </Card>
@@ -74,8 +77,10 @@ export default function PlanCard() {
                     ))}
                 </CardContent>
                 <CardFooter>
-                    <Button className={'w-full'}>
-                        Accédez à toute la base
+                    <Button asChild className={'w-full'}>
+                        <Link to={`${import.meta.env.VITE_APP_URL}`}>
+                            Accédez à toute la base
+                        </Link>
                     </Button>
                 </CardFooter>
             </Card>

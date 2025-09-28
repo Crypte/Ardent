@@ -39,8 +39,11 @@ export default function Navbar() {
                             <DropdownMenuTrigger asChild>
                                 <Button>
                                     Mon compte
-                                    <Badge variant={'secondary'} className={'text-xs'}>
-                                        {user?.is_premium ? "Premium" : "Classic"}
+                                    <Badge
+                                        variant={'secondary'}
+                                        className={`text-xs ${user?.is_premium ? 'text-tertiary-foreground bg-tertiary' : ''}`}
+                                    >
+                                        {user?.is_premium ? "Illimité" : "Classic"}
                                     </Badge>
                                 </Button>
                             </DropdownMenuTrigger>
