@@ -183,7 +183,7 @@ export default function ProposalForm() {
                                     >
                                         <LinkIcon className="size-4 text-tertiary-foreground" />
                                     </div>
-                                    <p className="mb-1.5 text-sm font-medium">Ajouter des ressources</p>
+                                    <p className="mb-2 font-medium">Ajouter des ressources</p>
                                     <p className="text-muted-foreground text-xs mb-4">
                                         Liens, documentations, références utiles pour ce sujet
                                     </p>

@@ -7,7 +7,7 @@ import {
     CredenzaHeader,
     CredenzaTitle
 } from "@/components/ui/credenza"
-import {Clock, Wrench} from "lucide-react"
+import {Clock} from "lucide-react"
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import { useEffect, useState } from "react";
 import {Badge} from "@/components/ui/badge.tsx";
@@ -76,7 +76,7 @@ export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: Al
                 <CredenzaFooter className="flex sm:flex-col gap-2">
                     {!isPremium && (
                         <Button disabled variant="outline" className="w-full">
-                            Ardent illimité bientôt disponible<Wrench/>
+                            Ardent illimité bientôt disponible
                         </Button>
                     )}
                     <Button onClick={() => {

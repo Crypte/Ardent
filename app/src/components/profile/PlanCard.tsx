@@ -54,7 +54,7 @@ export function PlanCard() {
                             <CardAction>
                                 <Badge
                                     variant={'secondary'}
-                                    className={`text-md items-baseline ${isPremium ? 'border-tertiary-foreground' : 'border-black'}`}
+                                    className={`items-baseline ${isPremium ? 'border-tertiary-foreground' : 'border-black'}`}
                                 >
                                     Plan actuel
                                 </Badge>
@@ -82,7 +82,7 @@ export function PlanCard() {
                                 <CardTitle className={'text-2xl'}>Ardent Illimité</CardTitle>
                                 <CardDescription>L'expérience complète</CardDescription>
                                 <CardAction>
-                                    <Badge variant={'secondary'} className={'text-md  border-tertiary-foreground'}>
+                                    <Badge variant={'secondary'} className={'border-tertiary-foreground'}>
                                        Bientôt disponible
                                     </Badge>
                                 </CardAction>
