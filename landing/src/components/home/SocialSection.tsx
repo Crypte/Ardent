@@ -5,15 +5,15 @@ import { Mail } from "lucide-react";
 
 export default function SocialSection() {
     return (
-        <section className=" text-center">
-            <div className="bg-gradient-to-br from-card to-card/30 border rounded-2xl p-8 backdrop-blur-sm shadow-lg">
-                <div className="space-y-6">
+        <section className="">
+            <div className=" border-tertiary-foreground bg-gradient-to-br from-card to-card/30 border rounded-2xl p-8 backdrop-blur-sm shadow-lg">
+                <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-2xl font-bold text-primary mb-2">
                             Nous Contacter
                         </h2>
-                        <p className="text-muted-foreground">
-                            Rejoignez notre communauté et restez informé de nos dernières nouveautés
+                        <p className="text-xs text-muted-foreground">
+                            Réponse sous 48h • Community support disponible sur X
                         </p>
                     </div>
                     
@@ -32,10 +32,7 @@ export default function SocialSection() {
                             </Link>
                         </Button>
                     </div>
-                    
-                    <p className="text-xs text-muted-foreground">
-                        Réponse sous 48h • Community support disponible sur X
-                    </p>
+
                 </div>
             </div>
         </section>
