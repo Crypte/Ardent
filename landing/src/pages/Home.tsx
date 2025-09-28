@@ -5,7 +5,7 @@ import FAQSection from "@/components/home/FAQSection.tsx";
 
 export default function Home() {
     return (
-        <div className="min-h-screen space-y-10">
+        <div className="min-h-screen">
             <HeroCard/>
             <PlanCard/>
             <FAQSection/>
