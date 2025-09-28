@@ -17,7 +17,6 @@ import Register from "@/pages/Register"
 // Pages protégées
 import Profile from "@/pages/Profile"
 import Home from "@/pages/Home.tsx"
-import About from "@/pages/About"
 import NotFound from "@/pages/NotFound.tsx";
 import Proposal from "@/pages/Proposal.tsx";
 
@@ -42,7 +41,6 @@ export function AppRoutes() {
 
                 {/* Autres pages sans ArticleLayout */}
                 <Route path="profile" element={<Profile />} />
-                <Route path="about" element={<About />} />
                 <Route path="proposal" element={<Proposal />} />
                 <Route path="*" element={<NotFound />} />
             </Route>

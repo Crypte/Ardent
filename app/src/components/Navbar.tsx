@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import {ArrowRightIcon, BookOpen, CircleUser, LogOutIcon, Menu} from "lucide-react"
+import {ArrowRightIcon, CircleUser, LogOutIcon, Menu} from "lucide-react"
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet"
 import { useAuth } from "@/contexts/AuthContext"
 import {
@@ -12,12 +12,6 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {navigationMenuTriggerStyle} from "@/components/ui/navigation-menu.tsx";
-
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
 import {Badge} from "@/components/ui/badge.tsx";
 
 export default function Navbar() {
@@ -40,19 +34,7 @@ export default function Navbar() {
                 </div>
                 
                 <div className={'flex items-center space-x-4 max-xl:hidden'}>
-                    <div className={'flex items-center space-x-1'}>
                         <Link className={navigationMenuTriggerStyle()} to="/proposal ">Proposer un sujet</Link>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button asChild variant={'ghost'}>
-                                <Link to="/about"><BookOpen/></Link>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>A propos</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button>

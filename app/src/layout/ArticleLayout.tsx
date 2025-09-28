@@ -17,7 +17,7 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
     const allViewedOverlay = useAllViewedOverlay(isAllViewed)
 
     return (
-        <>
+        <div>
             <AllViewedOverlay
                 isVisible={allViewedOverlay.isVisible}
                 onReviewOld={allViewedOverlay.hide}
@@ -29,6 +29,6 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
                 onNavigateToRandom={navigateToRandomArticle}
                 isAllViewed={isAllViewed}
             />
-        </>
+        </div>
     )
 }

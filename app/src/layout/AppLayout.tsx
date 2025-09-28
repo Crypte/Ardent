@@ -6,7 +6,7 @@ export default function AppLayout() {
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />
-            <main className="flex-grow container py-6 mx-auto">
+            <main className="flex-grow container py-10 mx-auto">
                 <Outlet />
             </main>
             <Footer />

@@ -24,7 +24,7 @@ export default function RessourceHeader({ title, theme, created, isViewed}: Reso
     
     const formattedDate = formatDate(created)
     return (
-        <div className={'mb-8 space-y-3'}>
+        <div className={'mb-10 space-y-3'}>
             <div className={'flex items-center justify-between gap-5'}>
                 <div className={'flex items-center gap-4 flex-wrap'}>
                     {isViewed && (
