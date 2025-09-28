@@ -662,6 +662,15 @@ migrate((app) => {
           "type": "bool"
         },
         {
+          "hidden": false,
+          "id": "bool2302481541",
+          "name": "is_premium",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
+        },
+        {
           "autogeneratePattern": "",
           "hidden": false,
           "id": "text1579384326",
@@ -879,6 +888,15 @@ migrate((app) => {
           "type": "bool"
         },
         {
+          "hidden": false,
+          "id": "bool1811784642",
+          "name": "is_public",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
+        },
+        {
           "convertURLs": false,
           "hidden": false,
           "id": "editor4274335913",
@@ -1042,7 +1060,7 @@ migrate((app) => {
         {
           "exceptDomains": null,
           "hidden": false,
-          "id": "_clone_HfJv",
+          "id": "_clone_Jr1n",
           "name": "email",
           "onlyDomains": null,
           "presentable": false,
@@ -1053,7 +1071,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_K7Zm",
+          "id": "_clone_Dkhn",
           "max": 255,
           "min": 0,
           "name": "name",
@@ -1066,7 +1084,16 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_2unZ",
+          "id": "_clone_HAq8",
+          "name": "is_premium",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
+        },
+        {
+          "hidden": false,
+          "id": "_clone_SNPb",
           "name": "verified",
           "presentable": false,
           "required": false,
@@ -1075,7 +1102,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_WFJ8",
+          "id": "_clone_IFvO",
           "maxSelect": 1,
           "maxSize": 0,
           "mimeTypes": [
@@ -1121,7 +1148,7 @@ migrate((app) => {
       "system": false,
       "type": "view",
       "updateRule": null,
-      "viewQuery": "SELECT\n    u.id AS id,\n    u.id AS user_id,\n    u.email,\n    u.name,\n    u.verified,\n    u.avatar,\n   \n    -- Nombre de ressources accessibles\n    (SELECT COUNT(*)\n     FROM ressource r\n     WHERE r.published = true\n     ) AS accessible_resources_count,\n\n    -- Nombre de ressources vues par l'utilisateur\n    COALESCE((SELECT COUNT(DISTINCT uv.ressource)\n              FROM user_views uv\n              WHERE uv.user = u.id), 0) AS viewed_resources_count\n\nFROM users u;\n",
+      "viewQuery": "SELECT\n    u.id AS id,\n    u.id AS user_id,\n    u.email,\n    u.name,\n    u.is_premium,\n    u.verified,\n    u.avatar,\n   \n    -- Nombre de ressources accessibles\n    (SELECT COUNT(*)\n     FROM ressource r\n     WHERE r.published = true\n     ) AS accessible_resources_count,\n\n    -- Nombre de ressources vues par l'utilisateur\n    COALESCE((SELECT COUNT(DISTINCT uv.ressource)\n              FROM user_views uv\n              WHERE uv.user = u.id), 0) AS viewed_resources_count\n\nFROM users u;\n",
       "viewRule": "id = @request.auth.id"
     },
     {
@@ -1145,7 +1172,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_I9zN",
+          "id": "_clone_2qgN",
           "max": 0,
           "min": 0,
           "name": "title",
@@ -1158,8 +1185,17 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_E6iz",
+          "id": "_clone_Vm0J",
           "name": "published",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
+        },
+        {
+          "hidden": false,
+          "id": "_clone_qxq6",
+          "name": "is_public",
           "presentable": false,
           "required": false,
           "system": false,
@@ -1168,7 +1204,7 @@ migrate((app) => {
         {
           "convertURLs": false,
           "hidden": false,
-          "id": "_clone_DqtV",
+          "id": "_clone_5non",
           "maxSize": 0,
           "name": "content",
           "presentable": false,
@@ -1178,7 +1214,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_D9TU",
+          "id": "_clone_qjVh",
           "maxSize": 0,
           "name": "source",
           "presentable": false,
@@ -1188,7 +1224,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_1IQe",
+          "id": "_clone_lMZa",
           "name": "created",
           "onCreate": true,
           "onUpdate": false,
@@ -1198,7 +1234,7 @@ migrate((app) => {
         },
         {
           "hidden": false,
-          "id": "_clone_tM9K",
+          "id": "_clone_v5bC",
           "name": "updated",
           "onCreate": true,
           "onUpdate": true,
@@ -1209,7 +1245,7 @@ migrate((app) => {
         {
           "autogeneratePattern": "",
           "hidden": false,
-          "id": "_clone_wpQX",
+          "id": "_clone_XLKP",
           "max": 0,
           "min": 0,
           "name": "theme_name",
@@ -1262,7 +1298,7 @@ migrate((app) => {
       "system": false,
       "type": "view",
       "updateRule": null,
-      "viewQuery": "SELECT\n    r.id as id,\n    r.title,\n    r.published,\n    r.content,\n    r.source,\n    r.created,\n    r.updated,\n    t.name AS theme_name,\n    \n    -- Compteurs de vues\n    COUNT(DISTINCT uv.id) as view_count,\n    COUNT(DISTINCT uv.user) as unique_viewers,\n    \n    -- Cartes liées en JSON array\n    COALESCE(\n        '[' || GROUP_CONCAT(\n            CASE \n                WHEN rc.id IS NOT NULL THEN \n                    '{\"id\":\"' || rc.id || \n                    '\",\"type\":\"' || COALESCE(rc.type, '') || \n                    '\",\"title\":\"' || COALESCE(rc.title, '') || \n                    '\",\"content\":\"' || COALESCE(rc.content, '') || \n                    '\",\"metadata\":' || COALESCE(rc.metadata, '{}') || '}'\n                ELSE NULL\n            END\n        ) || ']',\n        '[]'\n    ) AS cards\n  \nFROM ressource r\nLEFT JOIN theme t ON r.theme = t.id\nLEFT JOIN user_views uv ON uv.ressource = r.id\nLEFT JOIN ressource_card rc ON rc.ressource_id = r.id\nWHERE r.published = true\nGROUP BY r.id, r.title, r.published, r.content, r.source, r.created, r.updated, t.name;",
+      "viewQuery": "SELECT\n    r.id as id,\n    r.title,\n    r.published,\n    r.is_public,\n    r.content,\n    r.source,\n    r.created,\n    r.updated,\n    t.name AS theme_name,\n    \n    -- Compteurs de vues\n    COUNT(DISTINCT uv.id) as view_count,\n    COUNT(DISTINCT uv.user) as unique_viewers,\n    \n    -- Cartes liées en JSON array\n    COALESCE(\n        '[' || GROUP_CONCAT(\n            CASE \n                WHEN rc.id IS NOT NULL THEN \n                    '{\"id\":\"' || rc.id || \n                    '\",\"type\":\"' || COALESCE(rc.type, '') || \n                    '\",\"title\":\"' || COALESCE(rc.title, '') || \n                    '\",\"content\":\"' || COALESCE(rc.content, '') || \n                    '\",\"metadata\":' || COALESCE(rc.metadata, '{}') || '}'\n                ELSE NULL\n            END\n        ) || ']',\n        '[]'\n    ) AS cards\n  \nFROM ressource r\nLEFT JOIN theme t ON r.theme = t.id\nLEFT JOIN user_views uv ON uv.ressource = r.id\nLEFT JOIN ressource_card rc ON rc.ressource_id = r.id\nGROUP BY r.id, r.title, r.published,r.is_public, r.content, r.source, r.created, r.updated, t.name;",
       "viewRule": "@request.auth.id != \"\""
     },
     {
