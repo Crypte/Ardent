@@ -192,8 +192,8 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
     }
 
     try {
-        // Récupérer l'article depuis la vue (pour avoir les stats)
-        const ressource = $app.findRecordById("ressource_view", articleId)
+        // Récupérer l'article depuis la table ressource
+        const ressource = $app.findRecordById("ressource", articleId)
 
         if (!ressource) {
             return c.json(404, {"error": "Article non trouvé"})
@@ -223,6 +223,16 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
             })
         }
 
+        // Récupérer le thème
+        let themeName = ""
+        try {
+            const theme = $app.findRecordById("theme", ressource.get("theme"))
+            themeName = theme.get("name")
+        } catch (err) {
+            console.log("Erreur récupération thème:", err)
+            themeName = "Non défini"
+        }
+
         // L'utilisateur a accès, récupérer les données de vue
         let isViewed = false
         let viewedAt = null
@@ -241,24 +251,48 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
             console.log("Aucune vue trouvée pour l'utilisateur", authRecord.id, "article", articleId)
         }
 
-        // Parser les cartes JSON
+        // Récupérer les cartes depuis ressource_card
         let cards = []
         try {
-            const cardsJson = ressource.get("cards")
-            if (cardsJson && cardsJson !== '[]') {
-                // Si c'est déjà une string JSON, la parser
-                if (typeof cardsJson === 'string') {
-                    cards = JSON.parse(cardsJson)
-                } else {
-                    cards = cardsJson
-                }
-            }
+            const cardRecords = $app.findRecordsByFilter(
+                "ressource_card",
+                `ressource_id = "${articleId}"`,
+                "created"
+            )
+
+            cards = cardRecords.map(card => ({
+                id: card.get("id"),
+                type: card.get("type"),
+                title: card.get("title"),
+                content: card.get("content"),
+                metadata: card.get("metadata") || {}
+            }))
         } catch (err) {
-            console.log("Erreur lors du parsing des cartes JSON:", err)
+            console.log("Erreur lors de la récupération des cartes:", err)
             cards = []
         }
 
-        // Construire la réponse complète AVANT l'enregistrement
+        // Calculer les statistiques de vue
+        let viewCount = 0
+        let uniqueViewers = 0
+        try {
+            const views = $app.findRecordsByFilter(
+                "user_views",
+                `ressource = "${articleId}"`,
+                ""
+            )
+            viewCount = views.length
+
+            const uniqueUsers = new Set()
+            views.forEach(view => {
+                uniqueUsers.add(view.get("user"))
+            })
+            uniqueViewers = uniqueUsers.size
+        } catch (err) {
+            console.log("Erreur calcul statistiques:", err)
+        }
+
+        // Construire la réponse complète
         const response = {
             id: ressource.get("id"),
             title: ressource.get("title"),
@@ -267,9 +301,9 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
             source: ressource.get("source"),
             created: ressource.get("created"),
             updated: ressource.get("updated"),
-            theme_name: ressource.get("theme_name"),
-            view_count: ressource.get("view_count") || 0,
-            unique_viewers: ressource.get("unique_viewers") || 0,
+            theme_name: themeName,
+            view_count: viewCount,
+            unique_viewers: uniqueViewers,
             cards: cards,
             is_viewed: isViewed,
             viewed_at: viewedAt,
