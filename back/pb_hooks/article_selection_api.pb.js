@@ -246,7 +246,12 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
         try {
             const cardsJson = ressource.get("cards")
             if (cardsJson && cardsJson !== '[]') {
-                cards = JSON.parse(cardsJson)
+                // Si c'est déjà une string JSON, la parser
+                if (typeof cardsJson === 'string') {
+                    cards = JSON.parse(cardsJson)
+                } else {
+                    cards = cardsJson
+                }
             }
         } catch (err) {
             console.log("Erreur lors du parsing des cartes JSON:", err)
