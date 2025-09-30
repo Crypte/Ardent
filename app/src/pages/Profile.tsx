@@ -4,9 +4,27 @@ import {DeleteAccountCard} from "@/components/profile/DeleteAccountCard.tsx";
 import {PersonalInfoCard} from "@/components/profile/PersonalInfoCard.tsx";
 import {ProgressionCard} from "@/components/profile/ProgressionCard.tsx";
 import {PlanCard} from "@/components/profile/PlanCard.tsx";
+import {useEffect} from "react";
+import {useSearchParams} from "react-router-dom";
+import {toast} from "sonner";
 
 export default function Profile() {
     const { user, logout } = useAuth()
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+        const success = searchParams.get('success')
+
+        if (success === 'true') {
+            toast.success('Paiement réussi ! Bienvenue dans Ardent Illimité 🎉')
+            // Nettoyer l'URL
+            setSearchParams({})
+        } else if (success === 'false') {
+            toast.error('Paiement annulé')
+            // Nettoyer l'URL
+            setSearchParams({})
+        }
+    }, [searchParams, setSearchParams])
 
     return (
         <div className="space-y-10">

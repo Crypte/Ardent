@@ -44,7 +44,7 @@ export default function RandomButton({
                                 <CheckIcon className="size-4" />
                             </TooltipTrigger>
                             <TooltipContent>
-                                Toutes les ressources vues
+                                Toutes les ressources ont été vues
                             </TooltipContent>
                         </Tooltip>
                     ) : (

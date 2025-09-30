@@ -1,6 +1,6 @@
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {Check} from "lucide-react";
+import {Check, Loader2} from "lucide-react";
 import {
     Card,
     CardAction,
@@ -12,10 +12,35 @@ import {
 } from "@/components/ui/card";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
+import {useState} from "react";
+import {toast} from "sonner";
+import {pb} from "@/pocketbase/pocketbase.ts";
 
 export function PlanCard() {
     const { user } = useAuth()
     const isPremium = user?.is_premium || false
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleUpgradeToPremium = async () => {
+        setIsLoading(true)
+        try {
+            const response = await pb.send('/create-checkout-session', {
+                method: 'POST',
+            })
+
+            if (response.url) {
+                // Rediriger vers Stripe Checkout
+                window.location.href = response.url
+            } else {
+                toast.error("Erreur lors de la création de la session de paiement")
+            }
+        } catch (error: any) {
+            console.error('Erreur lors de la création de la session:', error)
+            toast.error(error?.message || "Une erreur est survenue")
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const FreeFeature = [
         "10 articles aléatoires par jour",
@@ -49,7 +74,7 @@ export function PlanCard() {
                                 {isPremium ? "Ardent Illimité" : "Ardent Classic"}
                             </CardTitle>
                             <CardDescription>
-                                {isPremium ? "L'expérience illimitée" : "L'expérience minimale"}
+                                {isPremium ? "L'expérience illimitée à vie" : "L'expérience minimale"}
                             </CardDescription>
                             <CardAction>
                                 <Badge
@@ -69,7 +94,7 @@ export function PlanCard() {
                                     <div className="w-4 h-4 bg-background/20 rounded-full flex items-center justify-center flex-shrink-0">
                                         <Check className="h-2.5 w-2.5" />
                                     </div>
-                                    <span className="text-sm md:text-base">{feature}</span>
+                                    <span className="text-sm md:text-md">{feature}</span>
                                 </div>
                             ))}
                         </CardContent>
@@ -83,7 +108,7 @@ export function PlanCard() {
                                 <CardDescription>L'expérience complète</CardDescription>
                                 <CardAction>
                                     <Badge variant={'secondary'} className={'border-tertiary-foreground'}>
-                                       Bientôt disponible
+                                       30 euros, à vie
                                     </Badge>
                                 </CardAction>
                             </CardHeader>
@@ -101,8 +126,19 @@ export function PlanCard() {
                                 ))}
                             </CardContent>
                             <CardFooter>
-                                <Button disabled className={'w-full'}>
-                                    Paiement unique de 30 euros
+                                <Button
+                                    onClick={handleUpgradeToPremium}
+                                    disabled={isLoading}
+                                    className={'w-full'}
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Chargement...
+                                        </>
+                                    ) : (
+                                        'Passez à Ardent illimité'
+                                    )}
                                 </Button>
                             </CardFooter>
                         </Card>
