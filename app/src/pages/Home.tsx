@@ -5,7 +5,6 @@ import { useArticleById } from '@/hooks/useArticleById.ts'
 import {AnimatePresence, motion} from "framer-motion";
 import RessourceHeader from "@/components/ressource/RessourceHeader.tsx";
 import RessourceContent from "@/components/ressource/RessourceContent.tsx";
-import RessourceSource from "@/components/ressource/RessourceSource.tsx";
 import RessourceCard from "@/components/ressource/RessourceCard.tsx";
 
 export default function Home() {
@@ -48,9 +47,6 @@ export default function Home() {
             >
                 <RessourceHeader title={article.title} theme={article.theme_name} created={article.created} isViewed={article.is_viewed}/>
                 <RessourceContent content={article.content} />
-                {article.source &&(
-                    <RessourceSource source={article.source}/>
-                )}
             </motion.div>
 
             <motion.div

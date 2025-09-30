@@ -21,7 +21,6 @@ export interface Article {
     content: string
     published: boolean
     is_public: boolean
-    source?: string[]
     created: string
     updated: string
     theme_name: string
