@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react"
 import { pb } from "@/pocketbase/pocketbase"
-import type { ArticleSelectionResponse, ApiError } from "@/types"
+import type { ArticleSelectionResponse, ApiError } from "@/types/API.ts"
 
 interface UseArticleNavigationReturn {
     data: ArticleSelectionResponse | null
