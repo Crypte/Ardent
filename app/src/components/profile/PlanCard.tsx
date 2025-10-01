@@ -1,6 +1,6 @@
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {Check, Loader2} from "lucide-react";
+import {Check, Download, Loader2} from "lucide-react";
 import {
     Card,
     CardAction,
@@ -15,11 +15,14 @@ import {Separator} from "@/components/ui/separator.tsx";
 import {useState} from "react";
 import {toast} from "sonner";
 import {pb} from "@/pocketbase/pocketbase.ts";
+import {useInvoice} from "@/hooks/useInvoice";
 
 export function PlanCard() {
     const { user } = useAuth()
     const isPremium = user?.is_premium || false
+    const hasStripeCustomer = Boolean(user?.stripe_customer_id)
     const [isLoading, setIsLoading] = useState(false)
+    const { downloadInvoice, isLoading: isDownloadingInvoice } = useInvoice()
 
     const handleUpgradeToPremium = async () => {
         setIsLoading(true)
@@ -81,7 +84,10 @@ export function PlanCard() {
                                     variant={'secondary'}
                                     className={`items-baseline ${isPremium ? 'border-tertiary-foreground' : 'border-black'}`}
                                 >
-                                    Plan actuel
+                                    {isPremium && user?.premium_since
+                                        ? `Depuis ${new Date(user.premium_since).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`
+                                        : 'Plan actuel'
+                                    }
                                 </Badge>
                             </CardAction>
                         </CardHeader>
@@ -98,6 +104,27 @@ export function PlanCard() {
                                 </div>
                             ))}
                         </CardContent>
+                        {isPremium && hasStripeCustomer && (
+                            <CardFooter className="justify-end">
+                                <Button
+                                    onClick={downloadInvoice}
+                                    disabled={isDownloadingInvoice}
+                                    className={'w-full md:w-fit'}
+                                >
+                                    {isDownloadingInvoice ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Chargement...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Télécharger la facture
+                                        </>
+                                    )}
+                                </Button>
+                            </CardFooter>
+                        )}
                     </Card>
 
                     {/* Plan Illimité pour les utilisateurs Classic */}

@@ -147,3 +147,70 @@ routerAdd("POST", "/create-checkout-session", (e) => {
         });
     }
 }, $apis.requireAuth())
+
+
+routerAdd("GET", "/get-invoice", (e) => {
+    const authRecord = e.auth;
+
+    if (!authRecord) {
+        return e.json(401, {
+            "error": "Authentification requise",
+            "code": "AUTH_REQUIRED"
+        });
+    }
+
+    // Vérifier si l'utilisateur est premium et a un customer ID
+    if (!authRecord.get("is_premium")) {
+        return e.json(403, {
+            "error": "Vous devez être premium pour accéder aux factures",
+            "code": "NOT_PREMIUM"
+        });
+    }
+
+    const stripeCustomerId = authRecord.get("stripe_customer_id");
+    if (!stripeCustomerId) {
+        return e.json(404, {
+            "error": "Aucun customer Stripe trouvé",
+            "code": "NO_STRIPE_CUSTOMER"
+        });
+    }
+
+    try {
+        const apiKey = process.env.STRIPE_SECRET_KEY;
+
+        // Récupérer les invoices du customer
+        const invoicesResponse = $http.send({
+            url: `https://api.stripe.com/v1/invoices?customer=${stripeCustomerId}&limit=1`,
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`
+            }
+        });
+
+        if (invoicesResponse.statusCode !== 200) {
+            throw new Error(`Stripe API error: ${JSON.stringify(invoicesResponse.json)}`);
+        }
+
+        const invoices = invoicesResponse.json.data;
+        if (!invoices || invoices.length === 0) {
+            return e.json(404, {
+                "error": "Aucune facture trouvée",
+                "code": "NO_INVOICE"
+            });
+        }
+
+        const latestInvoice = invoices[0];
+
+        return e.json(200, {
+            "invoice_url": latestInvoice.hosted_invoice_url,
+            "invoice_pdf": latestInvoice.invoice_pdf
+        });
+
+    } catch (err) {
+        $app.logger().error("Error fetching invoice:", err);
+        return e.json(500, {
+            "error": "Erreur lors de la récupération de la facture",
+            "details": err.message
+        });
+    }
+}, $apis.requireAuth())

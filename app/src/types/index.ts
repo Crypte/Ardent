@@ -6,6 +6,8 @@ export interface User {
     verified: boolean
     avatar?: string | null
     is_premium: boolean
+    stripe_customer_id?: string | null
+    premium_since?: string | null
     accessible_resources_count: number
     viewed_resources_count: number
 }

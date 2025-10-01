@@ -13,6 +13,8 @@ export interface UserModel {
     name: string
     verified: boolean
     is_premium: boolean
+    stripe_customer_id?: string | null
+    premium_since?: string | null
 }
 
 interface LoginCredentials {
