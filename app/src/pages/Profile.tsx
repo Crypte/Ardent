@@ -16,7 +16,7 @@ export default function Profile() {
         const success = searchParams.get('success')
 
         if (success === 'true') {
-            toast.success('Paiement réussi ! Bienvenue dans Ardent Illimité 🎉')
+            toast.success('Paiement réussi, bienvenue dans Ardent Illimité')
             // Nettoyer l'URL
             setSearchParams({})
         } else if (success === 'false') {

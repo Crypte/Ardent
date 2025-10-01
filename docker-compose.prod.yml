@@ -3,10 +3,11 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY:-crypte/ardent}/back:${IMAGE_TAG:-latest}
     expose:
       - "8090"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
     volumes:
-      # En prod, on utilise un volume Docker persistant
       - pb_data_prod:/pb/pb_data
     networks:
       - app-network
