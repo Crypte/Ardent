@@ -74,6 +74,15 @@ routerAdd("POST", "/create-checkout-session", (e) => {
         const priceId = process.env.STRIPE_PRICE_ID
         const frontendUrl = process.env.FRONTEND_URL
 
+        // Chercher un customer existant par email
+        const customerSearchResponse = $http.send({
+            url: "https://api.stripe.com/v1/customers?email=" + encodeURIComponent(authRecord.get("email")) + "&limit=1",
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`
+            }
+        });
+
         // Construire le body au format form-urlencoded
         const sessionParams = {
             "payment_method_types[0]": "card",
@@ -83,10 +92,20 @@ routerAdd("POST", "/create-checkout-session", (e) => {
             "success_url": `${frontendUrl}/profile?success=true`,
             "cancel_url": `${frontendUrl}/profile?success=false`,
             "client_reference_id": authRecord.id,
-            "customer_email": authRecord.get("email"),
-            "customer_creation": "if_required",
-            "payment_intent_data[receipt_email]": authRecord.get("email")
+            "payment_intent_data[receipt_email]": authRecord.get("email"),
+            "invoice_creation[enabled]": "true"
         };
+
+        // Si un customer existe, le réutiliser, sinon Stripe en créera un nouveau
+        const customers = customerSearchResponse.json.data;
+        if (customers && customers.length > 0) {
+            sessionParams["customer"] = customers[0].id;
+            $app.logger().info("Reusing existing Stripe customer:", customers[0].id);
+        } else {
+            sessionParams["customer_email"] = authRecord.get("email");
+            sessionParams["customer_creation"] = "if_required";
+            $app.logger().info("Creating new Stripe customer for email:", authRecord.get("email"));
+        }
 
         const body = Object.entries(sessionParams)
             .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
