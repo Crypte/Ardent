@@ -69,7 +69,7 @@ export function PlanCard() {
             </CardHeader>
             <Separator/>
             <CardContent>
-                <section className={`gap-5 grid ${isPremium ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                <section className={`gap-5 grid ${isPremium ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}>
                     {/* Plan actuel de l'utilisateur */}
                     <Card className={isPremium ? "border-tertiary-foreground bg-tertiary" : ""}>
                         <CardHeader>
@@ -134,9 +134,8 @@ export function PlanCard() {
                                 <CardTitle className={'text-2xl'}>Ardent Illimité</CardTitle>
                                 <CardDescription>L'expérience complète</CardDescription>
                                 <CardAction>
-                                    <Badge variant={'secondary'} className={'border-tertiary-foreground'}>
-                                       30 euros, à vie
-                                    </Badge>
+                                    <span className="text-2xl font-bold">30€</span>
+                                    <span className="text-sm text-muted-foreground"> à vie</span>
                                 </CardAction>
                             </CardHeader>
                             <CardContent className={'flex-1'}>
@@ -148,7 +147,7 @@ export function PlanCard() {
                                         <div className="w-4 h-4 bg-background/20 rounded-full flex items-center justify-center flex-shrink-0">
                                             <Check className="h-2.5 w-2.5" />
                                         </div>
-                                        <span className="text-sm md:text-base">{feature}</span>
+                                        <span className="text-sm md:text-md">{feature}</span>
                                     </div>
                                 ))}
                             </CardContent>

@@ -31,7 +31,7 @@ export default function FAQSection() {
   return (
     <section className="py-20">
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-semibold mb-2">FAQ</h2>
+        <h2 className="text-3xl font-bold mb-2">Foire aux questions (WIP)</h2>
         <p className="text-lg text-muted-foreground">Peut-être une réponse facile ?</p>
       </div>
       <div className="space-y-4">

@@ -67,5 +67,5 @@ export function AnimatedCounter({
     return () => clearTimeout(timer)
   }, [value, duration, delay, easing])
 
-  return <span className={`tabular-nums ${className}`}>{formatter(currentValue)}</span>
+  return <span className={`${className}`}>{formatter(currentValue)}</span>
 }

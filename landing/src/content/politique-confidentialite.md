@@ -1,3 +1,5 @@
+# WIP
+
 ## Collecte des données
 
 Nous collectons les types de données suivants :

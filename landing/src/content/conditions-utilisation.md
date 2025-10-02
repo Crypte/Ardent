@@ -1,3 +1,5 @@
+# WIP
+
 ## Acceptation des conditions
 
 En utilisant l'application Ardent, vous acceptez d'être lié par ces conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service.

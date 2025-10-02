@@ -28,7 +28,7 @@ export default function SocialSection() {
                         <Button asChild variant="outline" className="flex items-center gap-2 justify-center">
                             <Link to="https://x.com/ardent_projet" target="_blank" rel="noopener noreferrer">
                                 <FaXTwitter className="h-4 w-4" />
-                                <span>Suivre sur X</span>
+                                <span>Nous suivre</span>
                             </Link>
                         </Button>
                     </div>

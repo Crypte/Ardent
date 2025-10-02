@@ -11,6 +11,7 @@ import {Clock} from "lucide-react"
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import { useEffect, useState } from "react";
 import {Badge} from "@/components/ui/badge.tsx";
+import {Link} from "react-router-dom";
 
 interface AllViewedOverlayProps {
     isVisible: boolean
@@ -66,7 +67,7 @@ export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: Al
                                 </div>
                             ) : (
                                 <>
-                                    <p className={'mb-4'}>Vous avez vu les 10 ressources gratuites de ce jour, attendez la prochaine rotation ou reconsultez les de façon aléatoire.</p>
+                                    <p className={'mb-4'}>Vous avez vu les 10 ressources gratuites de ce jour, attendez la prochaine rotation ou accédez à tout en illimité avec Ardent illimité</p>
                                     <Badge variant={'tertiary'} className={'text-lg'}>{timeUntilMidnight}</Badge>
                                 </>
                             )}
@@ -75,8 +76,10 @@ export default function AllViewedOverlay({ isVisible, onReviewOld, onClose }: Al
                 </CredenzaHeader>
                 <CredenzaFooter className="flex sm:flex-col gap-2">
                     {!isPremium && (
-                        <Button disabled variant="outline" className="w-full">
-                            Ardent illimité bientôt disponible
+                        <Button asChild variant="outline" className="w-full">
+                            <Link to={'/profile'}>
+                            En savoir plus sur Ardent illimité
+                            </Link>
                         </Button>
                     )}
                     <Button onClick={() => {

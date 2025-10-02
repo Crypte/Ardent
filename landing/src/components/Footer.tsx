@@ -36,7 +36,7 @@ export default function Footer() {
                 {/* Resources Column */}
                 <div className={'flex gap-16'}>
                 <div className="space-y-4">
-                    <h3 className="font-semibold text-foreground">Ressources</h3>
+                    <h3 className="font-semibold text-foreground">Légal</h3>
                     <nav className="space-y-3">
                         <Link
                             to="/conditions"
@@ -58,16 +58,13 @@ export default function Footer() {
 
                 {/* Company Column */}
                 <div className="space-y-4">
-                    <h3 className="font-semibold text-foreground">Company</h3>
+                    <h3 className="font-semibold text-foreground">Ressources</h3>
                     <nav className="space-y-3">
                         <Link
-                            to="/contributors"
+                            to="/livre-blanc"
                             className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            Contributors
-                        </Link>
-                        <Link to="/about" className="block text-sm text-muted-foreground hover:text-foreground transition-colors">
-                            About
+                            Livre blanc
                         </Link>
                     </nav>
                 </div>
