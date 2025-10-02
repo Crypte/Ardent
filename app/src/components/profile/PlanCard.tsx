@@ -73,23 +73,19 @@ export function PlanCard() {
                     {/* Plan actuel de l'utilisateur */}
                     <Card className={isPremium ? "border-tertiary-foreground bg-tertiary" : ""}>
                         <CardHeader>
-                            <CardTitle className={'text-2xl'}>
+                            <CardTitle className={'lg:text-2xl'}>
                                 {isPremium ? "Ardent Illimité" : "Ardent Classic"}
                             </CardTitle>
                             <CardDescription>
                                 {isPremium ? "L'expérience illimitée à vie" : "L'expérience minimale"}
                             </CardDescription>
-                            <CardAction>
-                                <Badge
-                                    variant={'secondary'}
-                                    className={`items-baseline ${isPremium ? 'border-tertiary-foreground' : 'border-black'}`}
-                                >
-                                    {isPremium && user?.premium_since
-                                        ? `Depuis ${new Date(user.premium_since).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}`
-                                        : 'Plan actuel'
-                                    }
-                                </Badge>
-                            </CardAction>
+                            {!isPremium && (
+                                <CardAction>
+                                    <Badge variant={'secondary'} className="lg:text-sm items-baseline">
+                                        Plan actuel
+                                    </Badge>
+                                </CardAction>
+                            )}
                         </CardHeader>
                         <CardContent className={'flex-1'}>
                             {(isPremium ? PremiumFeature : FreeFeature).map((feature, i) => (
@@ -104,25 +100,32 @@ export function PlanCard() {
                                 </div>
                             ))}
                         </CardContent>
-                        {isPremium && hasStripeCustomer && (
-                            <CardFooter className="justify-end">
-                                <Button
-                                    onClick={downloadInvoice}
-                                    disabled={isDownloadingInvoice}
-                                    className={'w-full md:w-fit'}
-                                >
-                                    {isDownloadingInvoice ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Chargement...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Download className="mr-2 h-4 w-4" />
-                                            Télécharger la facture
-                                        </>
-                                    )}
-                                </Button>
+                        {isPremium && (
+                            <CardFooter className="flex-col md:flex-row md:justify-between md:items-center gap-3">
+                                {user?.premium_since && (
+                                    <p className="text-xs lg:text-sm text-muted-foreground">
+                                        Membre depuis {new Date(user.premium_since).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                                    </p>
+                                )}
+                                {hasStripeCustomer && (
+                                    <Button
+                                        onClick={downloadInvoice}
+                                        disabled={isDownloadingInvoice}
+                                        className={'w-full md:w-fit'}
+                                    >
+                                        {isDownloadingInvoice ? (
+                                            <>
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                Chargement...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Download className="mr-2 h-4 w-4" />
+                                                Télécharger la facture
+                                            </>
+                                        )}
+                                    </Button>
+                                )}
                             </CardFooter>
                         )}
                     </Card>
@@ -131,10 +134,10 @@ export function PlanCard() {
                     {!isPremium && (
                         <Card className="border-tertiary-foreground bg-tertiary">
                             <CardHeader>
-                                <CardTitle className={'text-2xl'}>Ardent Illimité</CardTitle>
+                                <CardTitle className={'lg:text-2xl'}>Ardent Illimité</CardTitle>
                                 <CardDescription>L'expérience complète</CardDescription>
                                 <CardAction>
-                                    <span className="text-2xl font-bold">30€</span>
+                                    <span className="lg:text-2xl font-bold">30€</span>
                                     <span className="text-sm text-muted-foreground"> à vie</span>
                                 </CardAction>
                             </CardHeader>

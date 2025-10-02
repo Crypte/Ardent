@@ -44,7 +44,7 @@ export function DeleteAccountCard({ id, onAccountDeleted }: DeleteAccountCardPro
                             <div className="space-y-1">
                                 <h3 className="text-sm font-medium">Supprimer mon compte</h3>
                                 <p className="text-muted-foreground text-xs">
-                                    Supprimer votre compte et toutes vos données
+                                    Entraine la suppression de votre compte et de toutes ses données associées
                                 </p>
                             </div>
                             <Button
