@@ -28,7 +28,7 @@ const faqData = [
   }
 ];
 
-export default function FAQSection() {
+export default function FaqSection() {
   return (
     <Card>
         <CardHeader>

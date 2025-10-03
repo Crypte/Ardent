@@ -1,35 +1,35 @@
 import { useParams } from 'react-router-dom'
-import { RessourceSkeleton } from "@/components/ressource/RessourceSkeleton"
+import { ResourceSkeleton } from "@/components/resource/ResourceSkeleton"
 import { EmptyResourceCard } from "@/components/EmptyResourceCard"
-import { useArticleById } from '@/hooks/useArticleById.ts'
+import { useResourceById } from '@/hooks/useResourceById.ts'
 import {AnimatePresence, motion} from "framer-motion";
-import RessourceHeader from "@/components/ressource/RessourceHeader.tsx";
-import RessourceContent from "@/components/ressource/RessourceContent.tsx";
-import RessourceCard from "@/components/ressource/RessourceCard.tsx";
+import ResourceHeader from "@/components/resource/ResourceHeader.tsx";
+import ResourceContent from "@/components/resource/ResourceContent.tsx";
+import ResourceCard from "@/components/resource/ResourceCard.tsx";
 
 export default function Home() {
     const { id } = useParams<{ id?: string }>()
 
-    // Utiliser le hook qui récupère la ressource
-    const { article, loading, error } = useArticleById(id || null)
+    // Utiliser le hook qui récupère la resource
+    const { resource, loading, error } = useResourceById(id || null)
 
     // Si pas d'ID, le layout se charge de la redirection
     if (!id) {
-        return <RessourceSkeleton />
+        return <ResourceSkeleton />
     }
 
     // Si en cours de chargement
     if (loading) {
-        return <RessourceSkeleton />
+        return <ResourceSkeleton />
     }
 
-    // Si pas de ressource ou erreur
-    if (error || !article) return <EmptyResourceCard />
+    // Si pas de resource ou erreur
+    if (error || !resource) return <EmptyResourceCard />
 
     return (
         <AnimatePresence mode="wait">
         <motion.div
-            key={article.id}
+            key={resource.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -45,8 +45,8 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1, duration: 0.4 }}
             >
-                <RessourceHeader title={article.title} theme={article.theme_name} created={article.created} isViewed={article.is_viewed}/>
-                <RessourceContent content={article.content} />
+                <ResourceHeader title={resource.title} theme={resource.theme_name} created={resource.created} isViewed={resource.is_viewed}/>
+                <ResourceContent content={resource.content} />
             </motion.div>
 
             <motion.div
@@ -55,14 +55,14 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
             >
-                {Array.isArray(article.cards) && article.cards.map((card, index) => (
+                {Array.isArray(resource.cards) && resource.cards.map((card, index) => (
                     <motion.div
                         key={`card-${card.id}`}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3 + (index * 0.05), duration: 0.3 }}
                     >
-                        <RessourceCard card={card}/>
+                        <ResourceCard card={card}/>
                     </motion.div>
                 ))}
             </motion.div>

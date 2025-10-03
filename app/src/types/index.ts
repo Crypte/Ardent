@@ -12,8 +12,8 @@ export interface User {
     viewed_resources_count: number
 }
 
-// ================== ARTICLES/RESSOURCES ==================
-export interface Article {
+// ================== RESOURCES ==================
+export interface Resource {
     id: string
     title: string
     content: string
@@ -24,7 +24,7 @@ export interface Article {
     theme_name: string
     view_count: number
     unique_viewers: number
-    cards: ArticleCard[]
+    cards: ResourceCard[]
     // Données de vue utilisateur
     is_viewed: boolean
     viewed_at?: string | null
@@ -32,7 +32,7 @@ export interface Article {
     user_type?: "premium" | "free"
 }
 
-export interface ArticleCard {
+export interface ResourceCard {
     id: string
     type: 'vocabulaire' | 'event' | 'anecdote' | 'keynumber'
     title: string

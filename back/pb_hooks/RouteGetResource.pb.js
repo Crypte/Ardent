@@ -1,9 +1,9 @@
-routerAdd("GET", "/api/get-article/{id...}", (c) => {
-    const articleId = c.request.pathValue("id")
+routerAdd("GET", "/api/get-resource/{id...}", (c) => {
+    const resourceId = c.request.pathValue("id")
     const authRecord = c.auth
 
-    if (!articleId) {
-        return c.json(400, {"error": "ID de l'article requis"})
+    if (!resourceId) {
+        return c.json(400, {"error": "ID de la resource requis"})
     }
 
     if (!authRecord) {
@@ -14,21 +14,21 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
     }
 
     try {
-        // Récupérer l'article depuis la table ressource
-        const ressource = $app.findRecordById("ressource", articleId)
+        // Récupérer la resource depuis la table resource
+        const resource = $app.findRecordById("resource", resourceId)
 
-        if (!ressource) {
-            return c.json(404, {"error": "Article non trouvé"})
+        if (!resource) {
+            return c.json(404, {"error": "Resource non trouvée"})
         }
 
         const isUserPremium = authRecord.get("is_premium")
-        const isPublished = ressource.get("published")
-        const isPublic = ressource.get("is_public")
+        const isPublished = resource.get("published")
+        const isPublic = resource.get("is_public")
 
         // Vérifications de sécurité
         if (!isPublished) {
             return c.json(403, {
-                "error": "Article non publié",
+                "error": "Resource non publiée",
                 "hasAccess": false,
                 "reason": "not_published"
             })
@@ -41,14 +41,14 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
                 "hasAccess": false,
                 "reason": "premium_required",
                 "userType": "free",
-                "message": "Cet article nécessite un accès premium"
+                "message": "Cette resource nécessite un accès premium"
             })
         }
 
         // Récupérer le thème
         let themeName = ""
         try {
-            const theme = $app.findRecordById("theme", ressource.get("theme"))
+            const theme = $app.findRecordById("theme", resource.get("theme"))
             themeName = theme.get("name")
         } catch (err) {
             console.log("Erreur récupération thème:", err)
@@ -62,7 +62,7 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
         try {
             const userView = $app.findFirstRecordByFilter(
                 "user_views",
-                `user = "${authRecord.id}" && ressource = "${articleId}"`
+                `user = "${authRecord.id}" && resource = "${resourceId}"`
             )
 
             if (userView) {
@@ -70,15 +70,15 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
                 viewedAt = userView.get("viewed_at")
             }
         } catch (err) {
-            console.log("Aucune vue trouvée pour l'utilisateur", authRecord.id, "article", articleId)
+            console.log("Aucune vue trouvée pour l'utilisateur", authRecord.id, "resource", resourceId)
         }
 
-        // Récupérer les cartes depuis ressource_card
+        // Récupérer les cartes depuis resource_card
         let cards = []
         try {
             const cardRecords = $app.findRecordsByFilter(
-                "ressource_card",
-                `ressource_id = "${articleId}"`,
+                "resource_card",
+                `resource_id = "${resourceId}"`,
                 "created"
             )
 
@@ -100,7 +100,7 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
         try {
             const views = $app.findRecordsByFilter(
                 "user_views",
-                `ressource = "${articleId}"`,
+                `resource = "${resourceId}"`,
                 ""
             )
             viewCount = views.length
@@ -116,13 +116,13 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
 
         // Construire la réponse complète
         const response = {
-            id: ressource.get("id"),
-            title: ressource.get("title"),
-            content: ressource.get("content"),
-            published: ressource.get("published"),
-            source: ressource.get("source"),
-            created: ressource.get("created"),
-            updated: ressource.get("updated"),
+            id: resource.get("id"),
+            title: resource.get("title"),
+            content: resource.get("content"),
+            published: resource.get("published"),
+            source: resource.get("source"),
+            created: resource.get("created"),
+            updated: resource.get("updated"),
             theme_name: themeName,
             view_count: viewCount,
             unique_viewers: uniqueViewers,
@@ -138,7 +138,7 @@ routerAdd("GET", "/api/get-article/{id...}", (c) => {
         return c.json(200, response)
 
     } catch (error) {
-        console.error("Erreur lors de la récupération de l'article:", error)
+        console.error("Erreur lors de la récupération de la resource:", error)
         return c.json(500, {
             "error": "Erreur interne",
             "details": error.message

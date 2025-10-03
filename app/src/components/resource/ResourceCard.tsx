@@ -1,9 +1,9 @@
-import type { ArticleCard } from "@/types";
+import type { ResourceCard } from "@/types";
 import { Calendar, Zap, ChartColumn, BookA } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-interface RessourceCardProps {
-    card: ArticleCard
+interface ResourceCardProps {
+    card: ResourceCard
 }
 
 const cardConfig = {
@@ -37,8 +37,8 @@ const cardConfig = {
     }
 };
 
-export default function RessourceCard({ card }: RessourceCardProps) {
-    const config = cardConfig[card.type];
+export default function ResourceCard({ card }: ResourceCardProps) {
+    const config = cardConfig[card.type as keyof typeof cardConfig];
     const IconComponent = config.icon;
 
     const renderContent = () => {

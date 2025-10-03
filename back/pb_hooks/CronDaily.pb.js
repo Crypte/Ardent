@@ -1,51 +1,51 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-// Cron job qui s'exécute chaque jour à minuit pour sélectionner 10 nouveaux articles publics
-cronAdd("daily-article-selection", "0 0 * * *", () => {
-    console.log("🕛 Début de la sélection quotidienne des articles...")
+// Cron job qui s'exécute chaque jour à minuit pour sélectionner 10 nouvelles resources publiques
+cronAdd("daily-resource-selection", "0 0 * * *", () => {
+    console.log("🕛 Début de la sélection quotidienne des resources...")
 
     try {
-        // 1. Remettre tous les articles en privé
-        const allPublishedArticles = $app.findRecordsByFilter(
-            "ressource",
+        // 1. Remettre toutes les resources en privé
+        const allPublishedResources = $app.findRecordsByFilter(
+            "resource",
             "published = true",
             "",
-            1000 // Limite haute pour récupérer tous les articles
+            1000 // Limite haute pour récupérer toutes les resources
         )
 
-        console.log(`📚 Trouvé ${allPublishedArticles.length} articles publiés`)
+        console.log(`📚 Trouvé ${allPublishedResources.length} resources publiées`)
 
-        // Remettre tous les articles en privé
-        allPublishedArticles.forEach(article => {
-            article.set("is_public", false)
-            $app.save(article)
+        // Remettre toutes les resources en privé
+        allPublishedResources.forEach(resource => {
+            resource.set("is_public", false)
+            $app.save(resource)
         })
 
-        console.log("🔒 Tous les articles remis en privé")
+        console.log("🔒 Toutes les resources remises en privé")
 
-        // 2. Sélectionner 10 articles aléatoirement
-        if (allPublishedArticles.length > 0) {
+        // 2. Sélectionner 10 resources aléatoirement
+        if (allPublishedResources.length > 0) {
             // Mélanger le tableau
-            const shuffledArticles = allPublishedArticles.sort(() => 0.5 - Math.random())
+            const shuffledResources = allPublishedResources.sort(() => 0.5 - Math.random())
 
-            // Prendre les 10 premiers (ou moins s'il y en a moins de 10)
-            const selectedCount = Math.min(10, shuffledArticles.length)
-            const selectedArticles = shuffledArticles.slice(0, selectedCount)
+            // Prendre les 10 premières (ou moins s'il y en a moins de 10)
+            const selectedCount = Math.min(10, shuffledResources.length)
+            const selectedResources = shuffledResources.slice(0, selectedCount)
 
-            // Marquer les articles sélectionnés comme publics
-            selectedArticles.forEach(article => {
-                article.set("is_public", true)
-                $app.save(article)
+            // Marquer les resources sélectionnées comme publiques
+            selectedResources.forEach(resource => {
+                resource.set("is_public", true)
+                $app.save(resource)
             })
 
-            console.log(`✅ ${selectedCount} articles sélectionnés comme publics pour aujourd'hui`)
+            console.log(`✅ ${selectedCount} resources sélectionnées comme publiques pour aujourd'hui`)
 
-            // Log des articles sélectionnés pour debug
-            const selectedTitles = selectedArticles.map(a => a.get("title"))
-            console.log("📝 Articles publics du jour:", selectedTitles)
+            // Log des resources sélectionnées pour debug
+            const selectedTitles = selectedResources.map(r => r.get("title"))
+            console.log("📝 Resources publiques du jour:", selectedTitles)
 
         } else {
-            console.log("⚠️ Aucun article publié trouvé")
+            console.log("⚠️ Aucune resource publiée trouvée")
         }
 
     } catch (error) {

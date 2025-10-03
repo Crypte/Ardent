@@ -7,7 +7,7 @@ interface ResourceHeaderProps {
     isViewed:boolean
 }
 
-export default function RessourceHeader({ title, theme, created, isViewed}: ResourceHeaderProps) {
+export default function ResourceHeader({ title, theme, created, isViewed}: ResourceHeaderProps) {
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         const months = [

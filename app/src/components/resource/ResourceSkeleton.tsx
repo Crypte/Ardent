@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function RessourceSkeleton() {
+export function ResourceSkeleton() {
     return (
         <div className="max-w-full animate-pulse">
             {/* Header + Content section */}

@@ -1,19 +1,19 @@
-import { useArticleRoute } from '@/hooks/useArticleRoute'
+import { useResourceRoute } from '@/hooks/useResourceRoute'
 import { useAllViewedOverlay } from '@/hooks/useOverlayState'
 import RandomButton from "@/components/RandomButton.tsx"
 import ReadingProgress from "@/components/ReadingProgress.tsx"
 import AllViewedOverlay from "@/components/AllViewedOverlay.tsx"
 
-interface ArticleLayoutProps {
+interface ResourceLayoutProps {
     children: React.ReactNode
 }
 
 /**
- * Layout principal pour les pages d'articles
+ * Layout principal pour les pages de resources
  * Gère la navigation, les overlays et les contrôles globaux
  */
-export default function ArticleLayout({ children }: ArticleLayoutProps) {
-    const { isAllViewed, navigateToRandomArticle } = useArticleRoute()
+export default function ResourceLayout({ children }: ResourceLayoutProps) {
+    const { isAllViewed, navigateToRandomResource } = useResourceRoute()
     const allViewedOverlay = useAllViewedOverlay(isAllViewed)
 
     return (
@@ -26,7 +26,7 @@ export default function ArticleLayout({ children }: ArticleLayoutProps) {
             <ReadingProgress />
             {children}
             <RandomButton
-                onNavigateToRandom={navigateToRandomArticle}
+                onNavigateToRandom={navigateToRandomResource}
                 isAllViewed={isAllViewed}
             />
         </div>

@@ -1,11 +1,11 @@
-export interface ArticleSelectionResponse {
-    articleId: string | null
-    totalArticles: number
+export interface ResourceSelectionResponse {
+    resourceId: string | null
+    totalResources: number
     totalAccessible: number
     isAllViewed: boolean
     totalUnseenInDatabase: number
     userType: "premium" | "free"
-    articleTitle?: string
+    resourceTitle?: string
     isPublic?: boolean
     message?: string
 }

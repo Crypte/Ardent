@@ -3,7 +3,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute"
 import { PublicOnlyRoute } from "@/components/auth/PublicOnlyRoute"
 import AppLayout from "@/layout/AppLayout"
 import AuthLayout from "@/layout/AuthLayout"
-import ArticleLayout from "@/layout/ArticleLayout.tsx"
+import ResourceLayout from "@/layout/ResourceLayout.tsx"
 
 // Pages publiques
 import ResetPassword from "@/pages/ResetPassword"
@@ -35,11 +35,11 @@ export function AppRoutes() {
 
             {/* Routes protégées (auth requise) */}
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-                {/* Routes d'articles avec ArticleLayout */}
-                <Route path="/" element={<ArticleLayout><Home /></ArticleLayout>} />
-                <Route path="/:id" element={<ArticleLayout><Home /></ArticleLayout>} />
+                {/* Routes de resources avec ResourceLayout */}
+                <Route path="/" element={<ResourceLayout><Home /></ResourceLayout>} />
+                <Route path="/:id" element={<ResourceLayout><Home /></ResourceLayout>} />
 
-                {/* Autres pages sans ArticleLayout */}
+                {/* Autres pages sans ResourceLayout */}
                 <Route path="profile" element={<Profile />} />
                 <Route path="proposal" element={<Proposal />} />
                 <Route path="*" element={<NotFound />} />

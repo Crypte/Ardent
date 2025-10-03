@@ -10,7 +10,7 @@ interface RandomButtonProps {
 }
 
 /**
- * Bouton de navigation vers l'article suivant
+ * Bouton de navigation vers la resource suivante
  * Affiche le statut de progression et gère son état de chargement
  */
 export default function RandomButton({
